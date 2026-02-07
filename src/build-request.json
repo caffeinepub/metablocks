@@ -1,0 +1,262 @@
+{
+  "kind": "build_request",
+  "title": "Metablocks: Online multi-mode game hub with persistent progression",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Create the core app structure for an online game named \"Metablocks\" with a main hub screen that lets a signed-in user choose between these game modes: Endless Run, City Builder, Farming, Indoor (minigames), Car (racing), and Battle.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "Create an game which has game like endless run , city builder, farming game , indoor game,car game,battle game etc it name was metablocks it is an online game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "App title/branding uses the name \"Metablocks\" in the UI.",
+        "A hub/menu screen exists and clearly shows the 6 modes: Endless Run, City Builder, Farming, Indoor, Car, Battle.",
+        "Each mode can be entered from the hub and exited back to the hub without page reloads."
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "Implement Internet Identity sign-in and show a clear signed-in / signed-out state in the UI; require sign-in before a player can save or load any online game progress.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "it is an online game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Signed-out users can view the hub but are prompted to sign in when attempting to start a mode that persists progress.",
+        "Signed-in users see their principal (or a shortened identifier) displayed somewhere in the hub UI.",
+        "Sign-in/out works without modifying any files in the immutable paths list."
+      ]
+    },
+    {
+      "id": "REQ-3",
+      "text": "Add backend persistence for Metablocks player data, keyed by the authenticated user principal: player profile (display name optional), total coins, per-mode best scores, and last played timestamps.",
+      "target": "backend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "it is an online game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Backend exposes query/update methods to: getPlayer(), upsertPlayerProgress(...), and getLeaderboard(mode, limit).",
+        "Player data is stored per-caller principal and cannot be overwritten by other principals.",
+        "Per-mode best score updates only replace the stored best if the new score is higher."
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "text": "Implement the Endless Run mode as a playable mini-game with a simple loop (start, running, game over), scoring, and coin rewards; on game over, save the run score and coins to the backend for signed-in users.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "endless run"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Endless Run has a start action, an in-game state, and a game-over state.",
+        "A score is displayed during the run and a final score is shown on game over.",
+        "For signed-in users, the final score and earned coins are persisted and visible after returning to the hub (e.g., best score or total coins updates)."
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "text": "Implement the City Builder mode as a simple grid-based builder with placeable structures (at least 3 types) that cost coins; persist the city layout online for signed-in users and reload it on entry.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "city builder"
+        ]
+      },
+      "acceptanceCriteria": [
+        "City Builder displays a grid and allows placing at least 3 building types with different costs.",
+        "Placing a building reduces the player’s coin total (with validation to prevent negative coins).",
+        "For signed-in users, the city layout persists: after leaving and re-entering City Builder, the previously placed buildings are restored."
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "text": "Implement the Farming mode with at least 3 crop types, a plant → grow (time-based) → harvest loop, and coin rewards; persist farm plots and crop timers online for signed-in users.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "farming game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Player can plant at least 3 crop types on farm plots.",
+        "Crops have a visible growing state and become harvestable after a duration.",
+        "For signed-in users, farm state persists across leaving/reloading the app, including growth progress based on timestamps."
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "text": "Implement the Indoor mode as a small set of at least 2 minigames (e.g., a quick reaction game and a simple puzzle), each with scoring and coin rewards; persist best scores per minigame for signed-in users.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "indoor game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Indoor mode contains at least 2 distinct playable minigames accessible from an Indoor submenu.",
+        "Each minigame has a score and an end condition.",
+        "For signed-in users, best scores per minigame are saved and shown when revisiting the Indoor mode."
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "text": "Implement the Car mode as a simple racing/time-trial mini-game with a track, timer, and performance result (best time); persist best time online for signed-in users.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "car game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Car mode has a start, in-progress, and finish state, with a timer shown in the UI.",
+        "A best time is tracked and displayed.",
+        "For signed-in users, best time persists across sessions and is loaded on entry."
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "text": "Implement the Battle mode as a turn-based battle mini-game (player vs CPU) with basic stats (HP, attack) and at least 3 actions; persist battle-related progression (e.g., wins count and best streak) online for signed-in users.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "battle game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Battle mode allows a player to complete a full fight against a CPU opponent using at least 3 actions (e.g., attack, defend, special).",
+        "The battle ends deterministically with win/lose conditions and a result screen.",
+        "For signed-in users, wins count and best streak (or equivalent progression stat) persist across sessions."
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "text": "Add a global leaderboard screen that shows top players per mode (best score or best time depending on mode) and the current user’s rank when signed in.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "it is an online game"
+        ]
+      },
+      "acceptanceCriteria": [
+        "A leaderboard screen exists and can be accessed from the hub.",
+        "User can switch between modes to view that mode’s leaderboard.",
+        "Backend returns a deterministic ordering and the frontend renders at least top 10 entries plus the signed-in user’s own position if available."
+      ]
+    },
+    {
+      "id": "REQ-11",
+      "text": "Define and apply a cohesive visual theme for Metablocks (distinct style, color palette, typography, component styling) across the hub and all modes, avoiding blue/purple as the primary palette.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "it name was metablocks"
+        ]
+      },
+      "acceptanceCriteria": [
+        "All screens share a consistent theme (layout, type scale, buttons, panels).",
+        "Primary palette is not blue/purple-dominant.",
+        "UI remains readable and accessible (contrast and clear affordances)."
+      ]
+    },
+    {
+      "id": "REQ-12",
+      "text": "Add generated static image assets for Metablocks branding and UI (logo, hub background, and mode icons) and render them from frontend static assets.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-2"
+        ],
+        "quotes": [
+          "it name was metablocks"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Generated images are added under frontend/public/assets/generated and referenced directly by the frontend.",
+        "Hub page displays the logo and a background/hero image.",
+        "Each of the 6 modes has an icon displayed in the hub menu."
+      ]
+    }
+  ],
+  "constraints": [
+    "Backend must remain a single Motoko actor (single-actor architecture).",
+    "Do not edit files under frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
+    "Do not implement real-time multiplayer (no WebSockets/Socket.io); \"online\" must be achieved via persistent storage + leaderboards + asynchronous state.",
+    "No external databases or third-party auth providers; use Internet Identity only."
+  ],
+  "nonGoals": [
+    "Real-time PvP battles or synchronous multiplayer racing.",
+    "Open-world/fully featured city-builder or farming sim depth (keep MVP-scale mechanics).",
+    "In-app purchases, NFTs, or external wallet integrations.",
+    "Mobile-native (React Native) app delivery."
+  ],
+  "imageRequirements": {
+    "required": [
+      "Metablocks logo in a blocky/isometric game style (metablocks-logo.dim_512x512.png)",
+      "Wide hub background illustration with a stylized city/farm/track/arena collage (metablocks-hub-bg.dim_1920x1080.png)",
+      "Endless Run mode icon, blocky runner silhouette (icon-endless-run.dim_256x256.png)",
+      "City Builder mode icon, blocky skyline/building (icon-city-builder.dim_256x256.png)",
+      "Farming mode icon, blocky crop/field (icon-farming.dim_256x256.png)",
+      "Indoor mode icon, blocky puzzle/controller (icon-indoor.dim_256x256.png)",
+      "Car mode icon, blocky car/track (icon-car.dim_256x256.png)",
+      "Battle mode icon, blocky sword/shield (icon-battle.dim_256x256.png)"
+    ],
+    "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [
+      "Build an online multi-mode game called Metablocks (endless runner, city builder, farming, indoor minigames, car/time-trial, battle) with persistent progression and leaderboards."
+    ],
+    "goalsToRemove": [],
+    "preferencesToAdd": [
+      "Use English for user-facing text."
+    ],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
+  }
+}

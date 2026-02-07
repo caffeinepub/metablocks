@@ -1,0 +1,136 @@
+{
+  "kind": "spec_vs_diff_report",
+  "version": "1.0",
+  "generatedAt": "2026-02-07T16:01:19.439Z",
+  "summary": "Core Metablocks hub + routing and Internet Identity UI are present, along with several mode pages/hooks and a theme. However, backend API shape and persistence/leaderboard requirements are not met based on the diff, and multiple modes’ required online persistence is stubbed or missing; the leaderboard page is currently mock/random data rather than backend-driven.",
+  "missing_requirements": [
+    {
+      "id": "REQ-3",
+      "requirement": "Backend exposes query/update methods getPlayer(), upsertPlayerProgress(...), and getLeaderboard(mode, limit) with per-caller principal isolation and best-score-only-if-higher logic.",
+      "reason": "The backend shown does not define the required methods (names and signatures differ). Frontend calls actor.getPlayerData(...) which is not part of the required API, and leaderboard methods are not evidenced. Best-score update behavior cannot be confirmed from the truncated backend.",
+      "evidence": [
+        "backend/main.mo",
+        "frontend/src/hooks/usePlayerProfile.ts",
+        "frontend/src/hooks/useCarRacing.ts",
+        "frontend/src/hooks/useBattle.ts"
+      ]
+    },
+    {
+      "id": "REQ-4",
+      "requirement": "Endless Run playable loop (start/running/game over), scoring + coin rewards, and on game over persist score+coins for signed-in users and reflect updates in hub.",
+      "reason": "No Endless Run page implementation is shown in the diff summary (only routing to EndlessRunPage). Backend save flow shown in hooks uses startGame/updateGame/endGame but there is no evidence of Endless Run UI loop, scoring display, or coin rewards persistence behavior.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-5",
+      "requirement": "City Builder grid-based builder with 3 structure types, coin costs (no negative coins), and persistent city layout reload on entry for signed-in users.",
+      "reason": "Frontend hook explicitly states it is a simplified implementation and does not save layout or apply coin cost/validation; it only calls createOrUpdatePlayerData(null). No evidence of grid UI, 3 building placement, coin deduction, or backend storage/reload of layout.",
+      "evidence": [
+        "frontend/src/hooks/useCityBuilder.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-6",
+      "requirement": "Farming mode with 3 crops, time-based grow/harvest loop, coin rewards, and persistent farm plots with timers (timestamp-based) for signed-in users.",
+      "reason": "The farming hook does not persist plots/timestamps/rewards; it only calls createOrUpdatePlayerData(null). No evidence of grow timers, harvestability based on timestamps, or backend persistence of farm state.",
+      "evidence": [
+        "frontend/src/hooks/useFarming.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-7",
+      "requirement": "Indoor mode contains at least 2 distinct minigames with scoring/coin rewards and persists best scores per minigame for signed-in users.",
+      "reason": "No IndoorPage/minigame implementations are shown in the diff summary (only routing). Backend type includes MinigameScores but no evidenced frontend logic to play, score, reward coins, or persist best scores per minigame.",
+      "evidence": [
+        "frontend/src/App.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-8",
+      "requirement": "Car mode time-trial with best time persisted and loaded on entry for signed-in users.",
+      "reason": "Frontend saves a time via startGame/updateGame/endGame, but backend semantics for storing best time and loading it deterministically are not evidenced (backend is truncated and required API is different). Additionally, the hub displays bestScore for car from profile.bestScores.car rather than best time.",
+      "evidence": [
+        "frontend/src/pages/modes/CarPage.tsx",
+        "frontend/src/hooks/useCarRacing.ts",
+        "frontend/src/pages/HubPage.tsx",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-9",
+      "requirement": "Battle mode turn-based vs CPU with 3 actions and persistent progression (wins count and best streak) for signed-in users.",
+      "reason": "BattlePage implements 3 actions and win/lose UI, but persistence semantics are unclear: useBattle.saveWin calls startGame/updateGame/endGame with a hardcoded value and no explicit wins/streak update API. Backend battleStats exists as a type but update logic is not evidenced in the truncated backend.",
+      "evidence": [
+        "frontend/src/pages/modes/BattlePage.tsx",
+        "frontend/src/hooks/useBattle.ts",
+        "backend/main.mo"
+      ]
+    },
+    {
+      "id": "REQ-10",
+      "requirement": "Global leaderboard screen backed by backend getLeaderboard(mode, limit), deterministic ordering, mode switching, and showing top 10 plus current user rank when signed in.",
+      "reason": "LeaderboardPage uses mock/random data and does not call the backend. No evidence of current user rank display or deterministic ordering from the backend.",
+      "evidence": [
+        "frontend/src/pages/LeaderboardPage.tsx",
+        "backend/main.mo"
+      ]
+    }
+  ],
+  "hallucinated_features": [
+    {
+      "description": "Leaderboard UI populated with random/mock data rather than backend-driven results.",
+      "reason": "BuildRequest requires a real leaderboard backed by persistent backend data; adding random placeholder data is not requested behavior.",
+      "evidence": [
+        "frontend/src/pages/LeaderboardPage.tsx"
+      ]
+    },
+    {
+      "description": "Footer credit/link to caffeine.ai.",
+      "reason": "Not requested in the BuildRequest requirements or acceptance criteria.",
+      "evidence": [
+        "frontend/src/components/AppLayout.tsx"
+      ]
+    }
+  ],
+  "confidence": 0.72,
+  "changed_files": [
+    "all_files_summary.json",
+    "backend/main.mo",
+    "frontend-file-summaries.txt",
+    "frontend/index.css",
+    "frontend/index.html",
+    "frontend/src/App.tsx",
+    "frontend/src/components/AppLayout.tsx",
+    "frontend/src/components/AuthStatus.tsx",
+    "frontend/src/components/ModeTile.tsx",
+    "frontend/src/components/RequireSignInDialog.tsx",
+    "frontend/src/hooks/useActor.ts",
+    "frontend/src/hooks/useBattle.ts",
+    "frontend/src/hooks/useCarRacing.ts",
+    "frontend/src/hooks/useCityBuilder.ts",
+    "frontend/src/hooks/useFarming.ts",
+    "frontend/src/hooks/useGameProgress.ts",
+    "frontend/src/hooks/useInternetIdentity.ts",
+    "frontend/src/hooks/usePlayerProfile.ts",
+    "frontend/src/index.css",
+    "frontend/src/main.tsx",
+    "frontend/src/pages/HubPage.tsx",
+    "frontend/src/pages/LeaderboardPage.tsx",
+    "frontend/src/pages/modes/BattlePage.tsx",
+    "frontend/src/pages/modes/CarPage.tsx",
+    "frontend/src/pages/modes/CityBuilderPage.tsx",
+    "frontend/src/pages/modes/EndlessRunPage.tsx",
+    "frontend/src/pages/modes/FarmingPage.tsx",
+    "frontend/src/pages/modes/IndoorPage.tsx",
+    "frontend/src/pages/modes/indoor/PuzzleGame.tsx",
+    "frontend/src/pages/modes/indoor/ReactionGame.tsx",
+    "frontend/tailwind.config.js",
+    "project_state.json"
+  ]
+}
