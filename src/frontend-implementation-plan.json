@@ -1,241 +1,80 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "PS PUZZLE — Puzzle-collection hub with 5 mini-games and best-score UX",
+  "title": "Metablocks hub restore and routing",
   "requirements": [
     {
-      "id": "REQ-13",
-      "summary": "Rebrand all prominent UI text from Metablocks to PS PUZZLE.",
+      "id": "REQ-19",
+      "summary": "Replace the '/' hub with a Metablocks hub featuring 6 selectable game modes that navigate to playable mode pages.",
       "acceptanceCriteria": [
-        "The header title in the global layout shows \"PS PUZZLE\" instead of \"METABLOCKS\".",
-        "The hub page hero title and primary branding text show \"PS PUZZLE\".",
-        "No prominent UI text elements still reference \"Metablocks\" (excluding any unavoidable legacy identifiers such as package/canister names)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AppLayout.tsx",
-          "operation": "modify",
-          "description": "Update the global header title text from \"METABLOCKS\" to \"PS PUZZLE\" and ensure any other prominent layout branding text follows the new name. Use existing shadcn-ui Button component as currently composed; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "modify",
-          "description": "Update hero heading/alt text/branding copy to consistently use \"PS PUZZLE\" in English and remove remaining prominent \"Metablocks\" text from the hub experience. Use existing shadcn-ui Button and existing ModeTile; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/RequireSignInDialog.tsx",
-          "operation": "modify",
-          "description": "Adjust dialog copy to reference saving PS PUZZLE best scores (English-only) while keeping behavior and shadcn-ui AlertDialog composition intact. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-14",
-      "summary": "Replace the home hub with a PS PUZZLE puzzle-collection grid that launches each puzzle via tiles.",
-      "acceptanceCriteria": [
-        "The home route (\"/\") displays a puzzle-collection hub for PS PUZZLE (not the 6-mode Metablocks hub).",
-        "The hub shows at least 5 distinct puzzle tiles/cards, each with a title, short description, and icon.",
-        "Clicking a puzzle tile navigates to that puzzle’s screen."
+        "Visiting '/' shows a Metablocks-branded hub (not PS PUZZLE).",
+        "The hub displays 6 clear mode tiles: Endless Run, City Builder, Farming, Indoor, Car Racing, Battle.",
+        "Clicking each tile navigates to the corresponding playable mode page."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/HubPage.tsx",
           "operation": "modify",
-          "description": "Replace the current 6-mode hub content with a PS PUZZLE puzzle hub that renders a grid of at least 5 puzzle tiles (title, short description, generated icon) and navigates to dedicated puzzle routes on click. Continue using the existing ModeTile component for the tile UI; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/ModeTile.tsx",
-          "operation": "modify",
-          "description": "Adapt ModeTile as needed to support puzzle tiles (e.g., consistent icon sizing and optional best-score display for puzzles) while continuing to compose shadcn-ui Card/Button. Verify the component's usage instructions before implementing."
+          "description": "Rework the existing hub content from puzzle-focused to Metablocks-focused: render 6 mode tiles (Endless Run, City Builder, Farming, Indoor, Car Racing, Battle) and wire tile clicks to the new mode routes. Continue composing existing shadcn-ui Button and the existing ModeTile component (do not modify immutable UI components); verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-15",
-      "summary": "Add 5 playable puzzle mini-games with start/play/end loops, completion conditions, numeric scoring, and hub navigation.",
+      "id": "REQ-20",
+      "summary": "Add first-class router routes for Metablocks mode pages with a consistent URL scheme and ensure hub navigation (including leaderboard) works.",
       "acceptanceCriteria": [
-        "There are at least 5 puzzle mini-games available from the PS PUZZLE hub.",
-        "Each puzzle mini-game has: (1) a Start/New Game action, (2) a way to reset/retry, (3) an end/completion state, and (4) a displayed numeric score.",
-        "Each puzzle mini-game includes navigation back to the PS PUZZLE hub."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "operation": "create",
-          "description": "Create a dedicated puzzle route page for a sliding-tiles puzzle (distinct from the old Indoor flow) with a Start/New Game action, Reset/Retry, a completion state (solved), numeric score display, and a \"Back to PS PUZZLE Hub\" action. Compose existing shadcn-ui Card/Button patterns; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "operation": "create",
-          "description": "Create a memory match cards puzzle with a playable loop (Start, flips during play, completion when all pairs matched), numeric score (e.g., based on moves/time), reset/retry, and navigation back to PS PUZZLE hub. Compose shadcn-ui components for layout/controls; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "operation": "create",
-          "description": "Create a word scramble/anagram puzzle with Start/New round, interactive play (guess input), completion condition (correct guess or out-of-attempts), numeric score, retry/reset, and \"Back to PS PUZZLE Hub\" navigation. Compose shadcn-ui components for cards/buttons/inputs; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "operation": "create",
-          "description": "Create a sudoku/number-grid mini puzzle with a Start/New puzzle action, interactive play, completion validation, numeric score (e.g., based on mistakes/time), reset/retry, and navigation back to PS PUZZLE hub. Compose shadcn-ui components for structure and controls; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "operation": "create",
-          "description": "Create a lights-out/grid-toggle puzzle with Start/New Game to generate a solvable grid, completion when all lights are off, numeric score (e.g., moves), reset/retry, and navigation back to PS PUZZLE hub. Compose shadcn-ui components for structure and controls; verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "modify",
-          "description": "Wire the hub tiles to the 5 new puzzle routes (sliding, memory, words, sudoku, lights-out) and ensure there is a clear way back from each puzzle page to the hub. Continue using ModeTile for the tile grid; verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-16",
-      "summary": "Implement signed-in best-score UX for puzzles (save on completion when signed in; show best scores on hub; gate saving when signed out).",
-      "acceptanceCriteria": [
-        "When signed in, completing a puzzle mini-game saves a score to the backend and updates the player profile cache in the UI.",
-        "The PS PUZZLE hub shows the player’s best score per puzzle tile when signed in and data is available.",
-        "When signed out, puzzle games remain playable, but saving best scores is gated (e.g., prompts the user to sign in before saving)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/hooks/usePuzzleBestScores.ts",
-          "operation": "create",
-          "description": "Add a frontend hook that integrates with existing actor/profile querying to (a) read best scores per PS PUZZLE puzzle for the signed-in user and (b) expose a save-best-score helper to be called by puzzle pages on completion. Ensure it works with react-query caching patterns without modifying forbidden hooks. Verify selected component usage instructions (authorization + core-infrastructure patterns) before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "modify",
-          "description": "Display the signed-in player’s best score per puzzle tile when available (from the puzzle best-score hook/profile data). When signed out, show tiles without best scores (or a subtle signed-out state) while keeping puzzles playable. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "operation": "modify",
-          "description": "On puzzle completion, call the shared best-score save helper when signed in; if signed out, keep gameplay working but prompt/gate saving using the existing RequireSignInDialog. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "operation": "modify",
-          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog while still showing the final numeric score and allowing retry/reset. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "operation": "modify",
-          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog. Ensure numeric score is displayed in both cases. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "operation": "modify",
-          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog. Ensure numeric score is displayed and retry/reset works. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "operation": "modify",
-          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog. Ensure numeric score is displayed and retry/reset works. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/RequireSignInDialog.tsx",
-          "operation": "modify",
-          "description": "Make the dialog copy fit PS PUZZLE best-score saving and ensure it can be reused by puzzle pages for save gating without changing the underlying shadcn-ui composition. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "summary": "Register first-class routes for each PS PUZZLE puzzle and remove old Metablocks mode entry points from the hub.",
-      "acceptanceCriteria": [
-        "All puzzle mini-games are reachable via stable routes registered in the router.",
-        "The primary hub no longer presents the Metablocks mode tiles (Endless Run/City Builder/Farming/Indoor/Car/Battle).",
-        "Navigating back from any puzzle returns the user to the PS PUZZLE hub without errors."
+        "The router includes routes for Endless Run, City Builder, Farming, Indoor, Car Racing, and Battle pages under a consistent URL scheme.",
+        "No navigation from the Metablocks hub results in a 404 or blank page.",
+        "The existing '/leaderboard' route remains accessible from the hub."
       ],
       "file_operations": [
         {
           "path": "frontend/src/App.tsx",
           "operation": "modify",
-          "description": "Add TanStack Router routes for the 5 PS PUZZLE puzzles (e.g., /puzzles/sliding, /puzzles/memory, /puzzles/words, /puzzles/sudoku, /puzzles/lights-out) and ensure they are attached to the root layout. Keep existing routes intact but ensure the home route points to the PS PUZZLE hub experience. Verify router patterns before implementing."
+          "description": "Register Metablocks mode routes in the TanStack Router (e.g., under a consistent '/modes/*' scheme) and map them to the existing playable mode pages: EndlessRunPage, CityBuilderPage, FarmingPage, IndoorPage, CarPage, BattlePage. Keep existing puzzle routes intact and ensure '/leaderboard' remains registered and reachable."
         },
         {
           "path": "frontend/src/pages/HubPage.tsx",
           "operation": "modify",
-          "description": "Remove/disable the old Metablocks mode tiles from the primary hub grid and replace them with PS PUZZLE puzzle tiles that navigate to the newly registered puzzle routes. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "operation": "modify",
-          "description": "Ensure the page uses router navigation back to the PS PUZZLE hub route (\"/\") and does not rely on the old IndoorPage back links. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "operation": "modify",
-          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "operation": "modify",
-          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "operation": "modify",
-          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "operation": "modify",
-          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
+          "description": "Update hub navigation targets so each Metablocks mode tile navigates to the corresponding first-class router route and the Leaderboard button continues navigating to '/leaderboard'. Continue composing existing shadcn-ui Button; verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-18",
-      "summary": "Add PS PUZZLE generated branding/images as static assets and use them in the hub and tiles.",
+      "id": "REQ-21",
+      "summary": "Rebrand primary UI chrome from PS PUZZLE to Metablocks in the shared layout header and the hub hero area using English text.",
       "acceptanceCriteria": [
-        "The PS PUZZLE hub uses the generated logo and background images as part of its hero/branding area.",
-        "Each puzzle tile uses a corresponding generated icon from /assets/generated.",
-        "No generated images are served via backend endpoints; all are referenced as static files."
+        "The header in the shared layout displays \"Metablocks\" instead of \"PS PUZZLE\".",
+        "The main hub hero section displays \"Metablocks\" branding instead of \"PS PUZZLE\".",
+        "No prominent PS PUZZLE branding remains on the primary hub or layout header."
       ],
       "file_operations": [
         {
-          "path": "frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated PS PUZZLE logo asset as a static file at frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png",
-          "operation": "create",
-          "description": "Add the generated PS PUZZLE hub background image as a static file at frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated sliding tiles puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated memory match puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated word scramble/anagram puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated sudoku/number grid puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated lights-out/grid toggle puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png."
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Change the header title text from \"PS PUZZLE\" to \"Metablocks\" and ensure any prominent header branding reflects Metablocks. Continue using composed shadcn-ui Button; verify the component's usage instructions before implementing."
         },
         {
           "path": "frontend/src/pages/HubPage.tsx",
           "operation": "modify",
-          "description": "Update the hub hero/branding area to use the static assets frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png and frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png, and update each puzzle tile to use its corresponding icon: frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png. Verify the component's usage instructions before implementing."
+          "description": "Update the hub hero heading/tagline copy to Metablocks branding in English and remove/replace any prominent PS PUZZLE hero text. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-22",
+      "summary": "Add and render Metablocks static branding assets (logo, hub background, and one icon per mode) from frontend/public/assets/generated.",
+      "acceptanceCriteria": [
+        "Metablocks hub uses a Metablocks logo image from /assets/generated.",
+        "Metablocks hub uses a Metablocks background image from /assets/generated.",
+        "Each of the 6 hub tiles uses a mode icon image from /assets/generated.",
+        "No PS PUZZLE logo/background/icons are used on the Metablocks hub."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HubPage.tsx",
+          "operation": "modify",
+          "description": "Swap hub hero artwork to Metablocks assets and ensure tiles use Metablocks mode icons: use frontend/public/assets/generated/metablocks-logo.dim_512x512.png for the hub logo, frontend/public/assets/generated/metablocks-hub-bg.dim_1920x1080.png for the hub background, and frontend/public/assets/generated/icon-endless-run.dim_256x256.png, frontend/public/assets/generated/icon-city-builder.dim_256x256.png, frontend/public/assets/generated/icon-farming.dim_256x256.png, frontend/public/assets/generated/icon-indoor.dim_256x256.png, frontend/public/assets/generated/icon-car.dim_256x256.png, frontend/public/assets/generated/icon-battle.dim_256x256.png for the 6 mode tiles. Remove any usage of PS PUZZLE assets on the hub. Verify the component's usage instructions before implementing."
         }
       ]
     }

@@ -1,171 +1,81 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-07T16:49:18.953Z",
+  "generatedAt": "2026-02-08T03:22:02.391Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 6,
-    "implemented": 6,
+    "total": 4,
+    "implemented": 4,
     "items": [
       {
-        "id": "REQ-13",
-        "summary": "Rebrand the application UI from \"Metablocks\" to \"PS PUZZLE\" and update all user-facing text to consistently use the new game name.",
+        "id": "REQ-19",
+        "summary": "Replace the current '/' hub experience with a Metablocks hub that lets the user choose between these game modes: Endless Run, City Builder, Farming, Indoor (minigames), Car Racing, and Battle.",
         "status": "implemented",
         "plannedFiles": [
-          "frontend/src/components/AppLayout.tsx",
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/components/RequireSignInDialog.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/components/AppLayout.tsx",
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/components/RequireSignInDialog.tsx"
-        ]
-      },
-      {
-        "id": "REQ-14",
-        "summary": "Replace the current hub experience with a \"PS PUZZLE\" hub that presents a collection of puzzle mini-games and lets the user launch each puzzle from a clear tile/grid menu.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/components/ModeTile.tsx"
+          "frontend/src/pages/HubPage.tsx"
         ],
         "matchedFiles": [
           "frontend/src/pages/HubPage.tsx"
         ]
       },
       {
-        "id": "REQ-15",
-        "summary": "Implement at least 5 distinct puzzle mini-games under PS PUZZLE, each with its own playable loop (start/play/end), a clear win/lose or completion condition, and a numeric score.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "frontend/src/pages/HubPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "frontend/src/pages/HubPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-16",
-        "summary": "Add signed-in persistence for PS PUZZLE so each puzzle mini-game can save the player’s best score online (keyed by Internet Identity principal) and display the best score on the hub when available.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/src/hooks/usePuzzleBestScores.ts",
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "frontend/src/components/RequireSignInDialog.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/hooks/usePuzzleBestScores.ts",
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "frontend/src/pages/puzzles/LightsOutPage.tsx",
-          "frontend/src/components/RequireSignInDialog.tsx"
-        ]
-      },
-      {
-        "id": "REQ-17",
-        "summary": "Update routing/navigation so PS PUZZLE puzzle pages are first-class routes in the app router (no broken links), and remove/disable navigation entry points to the old Metablocks mode routes from the primary hub experience.",
+        "id": "REQ-20",
+        "summary": "Update routing so Metablocks mode pages are first-class routes in the app router and are reachable from the Metablocks hub.",
         "status": "implemented",
         "plannedFiles": [
           "frontend/src/App.tsx",
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "frontend/src/pages/puzzles/LightsOutPage.tsx"
-        ],
-        "matchedFiles": [
-          "frontend/src/App.tsx",
-          "frontend/src/pages/HubPage.tsx",
-          "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-          "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-          "frontend/src/pages/puzzles/WordScramblePage.tsx",
-          "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-          "frontend/src/pages/puzzles/LightsOutPage.tsx"
-        ]
-      },
-      {
-        "id": "REQ-18",
-        "summary": "Render newly generated PS PUZZLE branding and puzzle icons from static assets under frontend/public/assets/generated and use them in the PS PUZZLE hub UI.",
-        "status": "implemented",
-        "plannedFiles": [
-          "frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png",
-          "frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png",
-          "frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png",
           "frontend/src/pages/HubPage.tsx"
         ],
         "matchedFiles": [
-          "frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png",
-          "frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png",
-          "frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png",
-          "frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png",
+          "frontend/src/App.tsx",
+          "frontend/src/pages/HubPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-21",
+        "summary": "Rebrand all primary UI chrome from PS PUZZLE back to Metablocks (header title, hub hero heading, and any prominent hub taglines) using English user-facing text.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/components/AppLayout.tsx",
+          "frontend/src/pages/HubPage.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/components/AppLayout.tsx",
+          "frontend/src/pages/HubPage.tsx"
+        ]
+      },
+      {
+        "id": "REQ-22",
+        "summary": "Add and render Metablocks static branding assets from frontend/public/assets/generated, including a logo, hub background, and one icon per Metablocks mode.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/HubPage.tsx"
+        ],
+        "matchedFiles": [
           "frontend/src/pages/HubPage.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
-    "backend/authorization/MixinAuthorization.mo",
-    "backend/authorization/access-control.mo",
-    "backend/main.mo",
     "build-request.json",
-    "build-template/README.md",
-    "caffeine.lock.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
-    "frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png",
-    "frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png",
-    "frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png",
-    "frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png",
-    "frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png",
-    "frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png",
-    "frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png",
+    "frontend/public/assets/generated/icon-mode-battle.dim_256x256.png",
+    "frontend/public/assets/generated/icon-mode-car.dim_256x256.png",
+    "frontend/public/assets/generated/icon-mode-city-builder.dim_256x256.png",
+    "frontend/public/assets/generated/icon-mode-endless-run.dim_256x256.png",
+    "frontend/public/assets/generated/icon-mode-farming.dim_256x256.png",
+    "frontend/public/assets/generated/icon-mode-indoor.dim_256x256.png",
+    "frontend/public/assets/generated/metablocks-hub-bg.dim_1920x1080.png",
+    "frontend/public/assets/generated/metablocks-logo.dim_512x512.png",
     "frontend/src/App.tsx",
-    "frontend/src/backend.d.ts",
-    "frontend/src/backend.ts",
     "frontend/src/components/AppLayout.tsx",
-    "frontend/src/components/RequireSignInDialog.tsx",
-    "frontend/src/declarations/backend.did.d.ts",
-    "frontend/src/declarations/backend.did.js",
-    "frontend/src/hooks/useActor.ts",
-    "frontend/src/hooks/usePuzzleBestScores.ts",
     "frontend/src/pages/HubPage.tsx",
-    "frontend/src/pages/puzzles/LightsOutPage.tsx",
-    "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
-    "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
-    "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
-    "frontend/src/pages/puzzles/WordScramblePage.tsx",
-    "frontend/src/utils/urlParams.ts",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

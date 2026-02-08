@@ -9,6 +9,12 @@ import WordScramblePage from './pages/puzzles/WordScramblePage';
 import SudokuMiniPage from './pages/puzzles/SudokuMiniPage';
 import LightsOutPage from './pages/puzzles/LightsOutPage';
 import LeaderboardPage from './pages/LeaderboardPage';
+import EndlessRunPage from './pages/modes/EndlessRunPage';
+import CityBuilderPage from './pages/modes/CityBuilderPage';
+import FarmingPage from './pages/modes/FarmingPage';
+import IndoorPage from './pages/modes/IndoorPage';
+import CarPage from './pages/modes/CarPage';
+import BattlePage from './pages/modes/BattlePage';
 
 const rootRoute = createRootRoute({
   component: AppLayout,
@@ -20,6 +26,44 @@ const indexRoute = createRoute({
   component: HubPage,
 });
 
+// Metablocks mode routes
+const endlessRunRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/modes/endless-run',
+  component: EndlessRunPage,
+});
+
+const cityBuilderRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/modes/city-builder',
+  component: CityBuilderPage,
+});
+
+const farmingRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/modes/farming',
+  component: FarmingPage,
+});
+
+const indoorRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/modes/indoor',
+  component: IndoorPage,
+});
+
+const carRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/modes/car',
+  component: CarPage,
+});
+
+const battleRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/modes/battle',
+  component: BattlePage,
+});
+
+// Puzzle routes (kept for backward compatibility)
 const slidingTilesRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/puzzles/sliding',
@@ -58,6 +102,12 @@ const leaderboardRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
+  endlessRunRoute,
+  cityBuilderRoute,
+  farmingRoute,
+  indoorRoute,
+  carRoute,
+  battleRoute,
   slidingTilesRoute,
   memoryMatchRoute,
   wordScrambleRoute,

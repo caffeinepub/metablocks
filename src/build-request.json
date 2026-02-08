@@ -1,138 +1,113 @@
 {
   "kind": "build_request",
-  "title": "Create PS PUZZLE: a puzzle-collection game with multiple puzzle mini-games",
+  "title": "Restore Metablocks as the primary app experience",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-13",
-      "text": "Rebrand the application UI from \"Metablocks\" to \"PS PUZZLE\" and update all user-facing text to consistently use the new game name.",
+      "id": "REQ-19",
+      "text": "Replace the current '/' hub experience with a Metablocks hub that lets the user choose between these game modes: Endless Run, City Builder, Farming, Indoor (minigames), Car Racing, and Battle.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-11"
+          "msg-1"
         ],
         "quotes": [
-          "Make an game which has many puzzle game named PS PUZZLE ."
+          "Recreate metablocks"
         ]
       },
       "acceptanceCriteria": [
-        "The header title in the global layout shows \"PS PUZZLE\" instead of \"METABLOCKS\".",
-        "The hub page hero title and primary branding text show \"PS PUZZLE\".",
-        "No prominent UI text elements still reference \"Metablocks\" (excluding any unavoidable legacy identifiers such as package/canister names)."
+        "Visiting '/' shows a Metablocks-branded hub (not PS PUZZLE).",
+        "The hub displays 6 clear mode tiles: Endless Run, City Builder, Farming, Indoor, Car Racing, Battle.",
+        "Clicking each tile navigates to the corresponding playable mode page."
       ]
     },
     {
-      "id": "REQ-14",
-      "text": "Replace the current hub experience with a \"PS PUZZLE\" hub that presents a collection of puzzle mini-games and lets the user launch each puzzle from a clear tile/grid menu.",
+      "id": "REQ-20",
+      "text": "Update routing so Metablocks mode pages are first-class routes in the app router and are reachable from the Metablocks hub.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-11"
+          "msg-1"
         ],
         "quotes": [
-          "Make an game which has many puzzle game named PS PUZZLE ."
+          "Recreate metablocks"
         ]
       },
       "acceptanceCriteria": [
-        "The home route (\"/\") displays a puzzle-collection hub for PS PUZZLE (not the 6-mode Metablocks hub).",
-        "The hub shows at least 5 distinct puzzle tiles/cards, each with a title, short description, and icon.",
-        "Clicking a puzzle tile navigates to that puzzle’s screen."
+        "The router includes routes for Endless Run, City Builder, Farming, Indoor, Car Racing, and Battle pages under a consistent URL scheme.",
+        "No navigation from the Metablocks hub results in a 404 or blank page.",
+        "The existing '/leaderboard' route remains accessible from the hub."
       ]
     },
     {
-      "id": "REQ-15",
-      "text": "Implement at least 5 distinct puzzle mini-games under PS PUZZLE, each with its own playable loop (start/play/end), a clear win/lose or completion condition, and a numeric score.",
+      "id": "REQ-21",
+      "text": "Rebrand all primary UI chrome from PS PUZZLE back to Metablocks (header title, hub hero heading, and any prominent hub taglines) using English user-facing text.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-11"
+          "msg-1"
         ],
         "quotes": [
-          "Make an game which has many puzzle game named PS PUZZLE ."
+          "Recreate metablocks"
         ]
       },
       "acceptanceCriteria": [
-        "There are at least 5 puzzle mini-games available from the PS PUZZLE hub.",
-        "Each puzzle mini-game has: (1) a Start/New Game action, (2) a way to reset/retry, (3) an end/completion state, and (4) a displayed numeric score.",
-        "Each puzzle mini-game includes navigation back to the PS PUZZLE hub."
+        "The header in the shared layout displays \"Metablocks\" instead of \"PS PUZZLE\".",
+        "The main hub hero section displays \"Metablocks\" branding instead of \"PS PUZZLE\".",
+        "No prominent PS PUZZLE branding remains on the primary hub or layout header."
       ]
     },
     {
-      "id": "REQ-16",
-      "text": "Add signed-in persistence for PS PUZZLE so each puzzle mini-game can save the player’s best score online (keyed by Internet Identity principal) and display the best score on the hub when available.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-11"
-        ],
-        "quotes": [
-          "Make an game which has many puzzle game named PS PUZZLE ."
-        ]
-      },
-      "acceptanceCriteria": [
-        "When signed in, completing a puzzle mini-game saves a score to the backend and updates the player profile cache in the UI.",
-        "The PS PUZZLE hub shows the player’s best score per puzzle tile when signed in and data is available.",
-        "When signed out, puzzle games remain playable, but saving best scores is gated (e.g., prompts the user to sign in before saving)."
-      ]
-    },
-    {
-      "id": "REQ-17",
-      "text": "Update routing/navigation so PS PUZZLE puzzle pages are first-class routes in the app router (no broken links), and remove/disable navigation entry points to the old Metablocks mode routes from the primary hub experience.",
+      "id": "REQ-22",
+      "text": "Add and render Metablocks static branding assets from frontend/public/assets/generated, including a logo, hub background, and one icon per Metablocks mode.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-11"
+          "msg-1"
         ],
         "quotes": [
-          "Make an game which has many puzzle game named PS PUZZLE ."
+          "Recreate metablocks"
         ]
       },
       "acceptanceCriteria": [
-        "All puzzle mini-games are reachable via stable routes registered in the router.",
-        "The primary hub no longer presents the Metablocks mode tiles (Endless Run/City Builder/Farming/Indoor/Car/Battle).",
-        "Navigating back from any puzzle returns the user to the PS PUZZLE hub without errors."
-      ]
-    },
-    {
-      "id": "REQ-18",
-      "text": "Render newly generated PS PUZZLE branding and puzzle icons from static assets under frontend/public/assets/generated and use them in the PS PUZZLE hub UI.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-11"
-        ],
-        "quotes": [
-          "Make an game which has many puzzle game named PS PUZZLE ."
-        ]
-      },
-      "acceptanceCriteria": [
-        "The PS PUZZLE hub uses the generated logo and background images as part of its hero/branding area.",
-        "Each puzzle tile uses a corresponding generated icon from /assets/generated.",
-        "No generated images are served via backend endpoints; all are referenced as static files."
+        "Metablocks hub uses a Metablocks logo image from /assets/generated.",
+        "Metablocks hub uses a Metablocks background image from /assets/generated.",
+        "Each of the 6 hub tiles uses a mode icon image from /assets/generated.",
+        "No PS PUZZLE logo/background/icons are used on the Metablocks hub."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
-    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything in frontend/src/components/ui; compose these components instead.",
-    "Use English for all user-facing UI text."
+    "Backend must remain a single Motoko actor in backend/main.mo.",
+    "Do not edit files under frontend/src/components/ui or any other frontend immutablePaths; compose existing UI components instead.",
+    "Use English for all user-facing text."
   ],
   "nonGoals": [
-    "Building non-puzzle game modes (endless runner, city builder, farming, car racing, battle) as part of PS PUZZLE.",
-    "Adding third-party authentication providers (only Internet Identity is allowed).",
-    "Adding external databases or non-Motoko backend services.",
-    "Real-time multiplayer or websocket-based features."
+    "Do not remove or rewrite the existing PS PUZZLE puzzle pages unless required for routing consistency.",
+    "Do not add third-party authentication providers (Internet Identity only).",
+    "Do not introduce external databases or additional backend services."
   ],
   "imageRequirements": {
     "required": [
-      "PS PUZZLE logo, bold playful puzzle-themed mark (ps-puzzle-logo.dim_512x512.png)",
-      "Wide puzzle-themed hub background illustration (ps-puzzle-hub-bg.dim_1920x1080.png)",
-      "Puzzle icon: sliding tiles (icon-puzzle-sliding.dim_256x256.png)",
-      "Puzzle icon: memory match cards (icon-puzzle-memory.dim_256x256.png)",
-      "Puzzle icon: word scramble/anagram (icon-puzzle-words.dim_256x256.png)",
-      "Puzzle icon: sudoku/number grid (icon-puzzle-sudoku.dim_256x256.png)",
-      "Puzzle icon: lights-out/grid toggle (icon-puzzle-lightsout.dim_256x256.png)"
+      "Metablocks logo, bold futuristic block-themed emblem (metablocks-logo.dim_512x512.png)",
+      "Wide Metablocks hub background illustration, neon/arcade block cityscape (metablocks-hub-bg.dim_1920x1080.png)",
+      "Mode icon illustration, endless runner (icon-mode-endless-run.dim_256x256.png)",
+      "Mode icon illustration, city builder (icon-mode-city-builder.dim_256x256.png)",
+      "Mode icon illustration, farming (icon-mode-farming.dim_256x256.png)",
+      "Mode icon illustration, indoor minigames (icon-mode-indoor.dim_256x256.png)",
+      "Mode icon illustration, car racing (icon-mode-car.dim_256x256.png)",
+      "Mode icon illustration, battle/combat (icon-mode-battle.dim_256x256.png)"
     ],
     "edits": []
+  },
+  "userProfileUpdate": {
+    "goalsToAdd": [],
+    "goalsToRemove": [],
+    "preferencesToAdd": [],
+    "preferencesToRemove": [],
+    "miscToAdd": [],
+    "miscToRemove": [],
+    "fieldsToSet": {},
+    "fieldsToDelete": []
   }
 }

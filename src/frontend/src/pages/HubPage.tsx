@@ -12,40 +12,47 @@ export default function HubPage() {
 
   const isSignedIn = identity && !identity.getPrincipal().isAnonymous();
 
-  const puzzles = [
+  const modes = [
     {
-      title: 'Sliding Tiles',
-      icon: '/assets/generated/icon-puzzle-sliding.dim_256x256.png',
-      description: 'Arrange the tiles in order by sliding them into place.',
-      route: '/puzzles/sliding',
+      title: 'Endless Run',
+      icon: '/assets/generated/icon-endless-run.dim_256x256.png',
+      description: 'Jump over obstacles and run as far as you can!',
+      route: '/modes/endless-run',
       bestScore: profile?.bestScores.endlessRun,
     },
     {
-      title: 'Memory Match',
-      icon: '/assets/generated/icon-puzzle-memory.dim_256x256.png',
-      description: 'Find matching pairs of cards with the fewest moves.',
-      route: '/puzzles/memory',
+      title: 'City Builder',
+      icon: '/assets/generated/icon-city-builder.dim_256x256.png',
+      description: 'Build your dream city with houses, shops, and parks.',
+      route: '/modes/city-builder',
       bestScore: profile?.bestScores.cityBuilder,
     },
     {
-      title: 'Word Scramble',
-      icon: '/assets/generated/icon-puzzle-words.dim_256x256.png',
-      description: 'Unscramble letters to form the correct word.',
-      route: '/puzzles/words',
+      title: 'Farming',
+      icon: '/assets/generated/icon-farming.dim_256x256.png',
+      description: 'Plant crops, watch them grow, and harvest rewards.',
+      route: '/modes/farming',
       bestScore: profile?.bestScores.farming,
     },
     {
-      title: 'Sudoku Mini',
-      icon: '/assets/generated/icon-puzzle-sudoku.dim_256x256.png',
-      description: 'Fill the grid with numbers following sudoku rules.',
-      route: '/puzzles/sudoku',
+      title: 'Indoor',
+      icon: '/assets/generated/icon-indoor.dim_256x256.png',
+      description: 'Play reaction and puzzle minigames indoors.',
+      route: '/modes/indoor',
       bestScore: profile?.bestScores.indoor,
     },
     {
-      title: 'Lights Out',
-      icon: '/assets/generated/icon-puzzle-lightsout.dim_256x256.png',
-      description: 'Turn off all the lights by toggling adjacent cells.',
-      route: '/puzzles/lights-out',
+      title: 'Car Racing',
+      icon: '/assets/generated/icon-car.dim_256x256.png',
+      description: 'Race against the clock and set the best time.',
+      route: '/modes/car',
+      bestScore: profile?.bestScores.car,
+    },
+    {
+      title: 'Battle',
+      icon: '/assets/generated/icon-battle.dim_256x256.png',
+      description: 'Fight enemies in turn-based combat battles.',
+      route: '/modes/battle',
       bestScore: profile?.bestScores.battle,
     },
   ];
@@ -56,18 +63,18 @@ export default function HubPage() {
       <div className="relative overflow-hidden rounded-2xl">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-20"
-          style={{ backgroundImage: 'url(/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png)' }}
+          style={{ backgroundImage: 'url(/assets/generated/metablocks-hub-bg.dim_1920x1080.png)' }}
         />
         <div className="relative z-10 flex flex-col items-center gap-6 px-8 py-16 text-center">
           <img
-            src="/assets/generated/ps-puzzle-logo.dim_512x512.png"
-            alt="PS PUZZLE"
+            src="/assets/generated/metablocks-logo.dim_512x512.png"
+            alt="Metablocks"
             className="h-32 w-32 drop-shadow-2xl"
           />
           <div>
-            <h1 className="mb-2 text-5xl font-black tracking-tight">PS PUZZLE</h1>
+            <h1 className="mb-2 text-5xl font-black tracking-tight">Metablocks</h1>
             <p className="text-lg text-muted-foreground">
-              Challenge your mind with five unique puzzle games!
+              Explore six unique game modes and build your legacy!
             </p>
           </div>
           <Button
@@ -82,16 +89,16 @@ export default function HubPage() {
         </div>
       </div>
 
-      {/* Puzzle Grid */}
+      {/* Mode Grid */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {puzzles.map((puzzle) => (
+        {modes.map((mode) => (
           <ModeTile
-            key={puzzle.route}
-            title={puzzle.title}
-            icon={puzzle.icon}
-            description={puzzle.description}
-            bestScore={isSignedIn && puzzle.bestScore ? Number(puzzle.bestScore) : undefined}
-            onClick={() => navigate({ to: puzzle.route })}
+            key={mode.route}
+            title={mode.title}
+            icon={mode.icon}
+            description={mode.description}
+            bestScore={isSignedIn && mode.bestScore ? Number(mode.bestScore) : undefined}
+            onClick={() => navigate({ to: mode.route })}
           />
         ))}
       </div>

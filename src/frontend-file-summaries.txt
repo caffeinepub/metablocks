@@ -1,10 +1,10 @@
 {
-  "frontend/src/App.tsx": "Main application component with TanStack Router setup for PS PUZZLE hub and five puzzle game routes (sliding tiles, memory match, word scramble, sudoku mini, lights out).",
-  "frontend/src/components/AppLayout.tsx": "Shared layout component with header displaying \"PS PUZZLE\" branding, navigation, coin display, auth status, and footer used across all pages.",
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup for Metablocks hub and six game mode routes (endless run, city builder, farming, indoor, car racing, battle) plus legacy puzzle routes and leaderboard.",
+  "frontend/src/components/AppLayout.tsx": "Shared layout component with header displaying \"Metablocks\" branding, navigation, coin display, auth status, and footer used across all pages.",
   "frontend/src/components/AuthStatus.tsx": "Authentication status widget displaying sign-in/out controls and shortened principal using Internet Identity.",
   "frontend/src/components/RequireSignInDialog.tsx": "Alert dialog prompting users to sign in when attempting to save best scores in PS PUZZLE games.",
   "frontend/src/components/ModeTile.tsx": "Reusable card component for displaying game mode tiles with icon, description, and best score.",
-  "frontend/src/pages/HubPage.tsx": "PS PUZZLE hub page displaying logo, hero section with background image, and grid of 5 puzzle tiles with navigation to individual puzzle games.",
+  "frontend/src/pages/HubPage.tsx": "Metablocks hub page displaying logo, hero section with background image, and grid of 6 mode tiles with navigation to individual game modes.",
   "frontend/src/pages/LeaderboardPage.tsx": "Leaderboard page with tabbed interface for viewing top players across all game modes.",
   "frontend/src/pages/modes/EndlessRunPage.tsx": "Endless runner game with jump mechanics, obstacle avoidance, scoring, and progress persistence using proper GameMode enum and useRef initialization.",
   "frontend/src/pages/modes/CityBuilderPage.tsx": "Grid-based city builder allowing placement of 3 structure types with coin costs and layout persistence.",
