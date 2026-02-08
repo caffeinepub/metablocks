@@ -102,17 +102,6 @@ export interface MinigameScores {
     puzzleGame: bigint;
     reactionGame: bigint;
 }
-export interface PlayerProfile {
-    cityLayout?: Array<Array<StructureType>>;
-    lastPlayed: Time;
-    minigameScores?: MinigameScores;
-    farmPlots?: Array<Array<CropType | null>>;
-    displayName?: string;
-    bestTime?: bigint;
-    totalCoins: bigint;
-    battleStats?: BattleStats;
-    bestScores: BestScores;
-}
 export interface BattleStats {
     winsCount: bigint;
     bestStreak: bigint;
@@ -122,6 +111,17 @@ export interface GameState {
     score: bigint;
     state: GameRunState;
     coinsEarned: bigint;
+}
+export interface UserProfile {
+    cityLayout?: Array<Array<StructureType>>;
+    lastPlayed: Time;
+    minigameScores?: MinigameScores;
+    farmPlots?: Array<Array<CropType | null>>;
+    displayName?: string;
+    bestTime?: bigint;
+    totalCoins: bigint;
+    battleStats?: BattleStats;
+    bestScores: BestScores;
 }
 export enum CropType {
     tomato = "tomato",
@@ -146,28 +146,68 @@ export enum StructureType {
     park = "park",
     shop = "shop"
 }
+export enum UserRole {
+    admin = "admin",
+    user = "user",
+    guest = "guest"
+}
 export interface backendInterface {
+    _initializeAccessControlWithSecret(userSecret: string): Promise<void>;
+    assignCallerUserRole(user: Principal, role: UserRole): Promise<void>;
     createOrUpdatePlayerData(displayName: string | null): Promise<void>;
     endGame(): Promise<GameRunState>;
+    getCallerUserProfile(): Promise<UserProfile | null>;
+    getCallerUserRole(): Promise<UserRole>;
     getGlobalGameState(): Promise<GameState | null>;
-    getPlayerData(user: Principal): Promise<PlayerProfile>;
+    getPlayerData(user: Principal): Promise<UserProfile>;
+    getUserProfile(user: Principal): Promise<UserProfile | null>;
+    isCallerAdmin(): Promise<boolean>;
+    saveCallerUserProfile(profile: UserProfile): Promise<void>;
     startGame(mode: GameMode): Promise<GameRunState>;
     updateGame(score: bigint): Promise<GameRunState>;
 }
-import type { BattleStats as _BattleStats, BestScores as _BestScores, CropType as _CropType, GameMode as _GameMode, GameRunState as _GameRunState, GameState as _GameState, MinigameScores as _MinigameScores, PlayerProfile as _PlayerProfile, StructureType as _StructureType, Time as _Time } from "./declarations/backend.did.d.ts";
+import type { BattleStats as _BattleStats, BestScores as _BestScores, CropType as _CropType, GameMode as _GameMode, GameRunState as _GameRunState, GameState as _GameState, MinigameScores as _MinigameScores, StructureType as _StructureType, Time as _Time, UserProfile as _UserProfile, UserRole as _UserRole } from "./declarations/backend.did.d.ts";
 export class Backend implements backendInterface {
     constructor(private actor: ActorSubclass<_SERVICE>, private _uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, private _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, private processError?: (error: unknown) => never){}
-    async createOrUpdatePlayerData(arg0: string | null): Promise<void> {
+    async _initializeAccessControlWithSecret(arg0: string): Promise<void> {
         if (this.processError) {
             try {
-                const result = await this.actor.createOrUpdatePlayerData(to_candid_opt_n1(this._uploadFile, this._downloadFile, arg0));
+                const result = await this.actor._initializeAccessControlWithSecret(arg0);
                 return result;
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.createOrUpdatePlayerData(to_candid_opt_n1(this._uploadFile, this._downloadFile, arg0));
+            const result = await this.actor._initializeAccessControlWithSecret(arg0);
+            return result;
+        }
+    }
+    async assignCallerUserRole(arg0: Principal, arg1: UserRole): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.assignCallerUserRole(arg0, to_candid_UserRole_n1(this._uploadFile, this._downloadFile, arg1));
+            return result;
+        }
+    }
+    async createOrUpdatePlayerData(arg0: string | null): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.createOrUpdatePlayerData(to_candid_opt_n3(this._uploadFile, this._downloadFile, arg0));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.createOrUpdatePlayerData(to_candid_opt_n3(this._uploadFile, this._downloadFile, arg0));
             return result;
         }
     }
@@ -175,116 +215,210 @@ export class Backend implements backendInterface {
         if (this.processError) {
             try {
                 const result = await this.actor.endGame();
-                return from_candid_GameRunState_n2(this._uploadFile, this._downloadFile, result);
+                return from_candid_GameRunState_n4(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.endGame();
-            return from_candid_GameRunState_n2(this._uploadFile, this._downloadFile, result);
+            return from_candid_GameRunState_n4(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserProfile(): Promise<UserProfile | null> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserProfile();
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserProfile();
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async getCallerUserRole(): Promise<UserRole> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.getCallerUserRole();
+                return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.getCallerUserRole();
+            return from_candid_UserRole_n24(this._uploadFile, this._downloadFile, result);
         }
     }
     async getGlobalGameState(): Promise<GameState | null> {
         if (this.processError) {
             try {
                 const result = await this.actor.getGlobalGameState();
-                return from_candid_opt_n4(this._uploadFile, this._downloadFile, result);
+                return from_candid_opt_n26(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getGlobalGameState();
-            return from_candid_opt_n4(this._uploadFile, this._downloadFile, result);
+            return from_candid_opt_n26(this._uploadFile, this._downloadFile, result);
         }
     }
-    async getPlayerData(arg0: Principal): Promise<PlayerProfile> {
+    async getPlayerData(arg0: Principal): Promise<UserProfile> {
         if (this.processError) {
             try {
                 const result = await this.actor.getPlayerData(arg0);
-                return from_candid_PlayerProfile_n9(this._uploadFile, this._downloadFile, result);
+                return from_candid_UserProfile_n7(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.getPlayerData(arg0);
-            return from_candid_PlayerProfile_n9(this._uploadFile, this._downloadFile, result);
+            return from_candid_UserProfile_n7(this._uploadFile, this._downloadFile, result);
         }
     }
-    async startGame(arg0: GameMode): Promise<GameRunState> {
+    async getUserProfile(arg0: Principal): Promise<UserProfile | null> {
         if (this.processError) {
             try {
-                const result = await this.actor.startGame(to_candid_GameMode_n26(this._uploadFile, this._downloadFile, arg0));
-                return from_candid_GameRunState_n2(this._uploadFile, this._downloadFile, result);
+                const result = await this.actor.getUserProfile(arg0);
+                return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
-            const result = await this.actor.startGame(to_candid_GameMode_n26(this._uploadFile, this._downloadFile, arg0));
-            return from_candid_GameRunState_n2(this._uploadFile, this._downloadFile, result);
+            const result = await this.actor.getUserProfile(arg0);
+            return from_candid_opt_n6(this._uploadFile, this._downloadFile, result);
+        }
+    }
+    async isCallerAdmin(): Promise<boolean> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.isCallerAdmin();
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.isCallerAdmin();
+            return result;
+        }
+    }
+    async saveCallerUserProfile(arg0: UserProfile): Promise<void> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n31(this._uploadFile, this._downloadFile, arg0));
+                return result;
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.saveCallerUserProfile(to_candid_UserProfile_n31(this._uploadFile, this._downloadFile, arg0));
+            return result;
+        }
+    }
+    async startGame(arg0: GameMode): Promise<GameRunState> {
+        if (this.processError) {
+            try {
+                const result = await this.actor.startGame(to_candid_GameMode_n42(this._uploadFile, this._downloadFile, arg0));
+                return from_candid_GameRunState_n4(this._uploadFile, this._downloadFile, result);
+            } catch (e) {
+                this.processError(e);
+                throw new Error("unreachable");
+            }
+        } else {
+            const result = await this.actor.startGame(to_candid_GameMode_n42(this._uploadFile, this._downloadFile, arg0));
+            return from_candid_GameRunState_n4(this._uploadFile, this._downloadFile, result);
         }
     }
     async updateGame(arg0: bigint): Promise<GameRunState> {
         if (this.processError) {
             try {
                 const result = await this.actor.updateGame(arg0);
-                return from_candid_GameRunState_n2(this._uploadFile, this._downloadFile, result);
+                return from_candid_GameRunState_n4(this._uploadFile, this._downloadFile, result);
             } catch (e) {
                 this.processError(e);
                 throw new Error("unreachable");
             }
         } else {
             const result = await this.actor.updateGame(arg0);
-            return from_candid_GameRunState_n2(this._uploadFile, this._downloadFile, result);
+            return from_candid_GameRunState_n4(this._uploadFile, this._downloadFile, result);
         }
     }
 }
-function from_candid_CropType_n21(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CropType): CropType {
-    return from_candid_variant_n22(_uploadFile, _downloadFile, value);
+function from_candid_CropType_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _CropType): CropType {
+    return from_candid_variant_n20(_uploadFile, _downloadFile, value);
 }
-function from_candid_GameMode_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _GameMode): GameMode {
-    return from_candid_variant_n8(_uploadFile, _downloadFile, value);
+function from_candid_GameMode_n29(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _GameMode): GameMode {
+    return from_candid_variant_n30(_uploadFile, _downloadFile, value);
 }
-function from_candid_GameRunState_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _GameRunState): GameRunState {
-    return from_candid_variant_n3(_uploadFile, _downloadFile, value);
+function from_candid_GameRunState_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _GameRunState): GameRunState {
+    return from_candid_variant_n5(_uploadFile, _downloadFile, value);
 }
-function from_candid_GameState_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _GameState): GameState {
-    return from_candid_record_n6(_uploadFile, _downloadFile, value);
+function from_candid_GameState_n27(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _GameState): GameState {
+    return from_candid_record_n28(_uploadFile, _downloadFile, value);
 }
-function from_candid_PlayerProfile_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _PlayerProfile): PlayerProfile {
-    return from_candid_record_n10(_uploadFile, _downloadFile, value);
+function from_candid_StructureType_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _StructureType): StructureType {
+    return from_candid_variant_n13(_uploadFile, _downloadFile, value);
 }
-function from_candid_StructureType_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _StructureType): StructureType {
-    return from_candid_variant_n15(_uploadFile, _downloadFile, value);
+function from_candid_UserProfile_n7(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserProfile): UserProfile {
+    return from_candid_record_n8(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [Array<Array<_StructureType>>]): Array<Array<StructureType>> | null {
-    return value.length === 0 ? null : from_candid_vec_n12(_uploadFile, _downloadFile, value[0]);
+function from_candid_UserRole_n24(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: _UserRole): UserRole {
+    return from_candid_variant_n25(_uploadFile, _downloadFile, value);
 }
-function from_candid_opt_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_MinigameScores]): MinigameScores | null {
+function from_candid_opt_n14(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_MinigameScores]): MinigameScores | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [Array<Array<[] | [_CropType]>>]): Array<Array<CropType | null>> | null {
-    return value.length === 0 ? null : from_candid_vec_n18(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [Array<Array<[] | [_CropType]>>]): Array<Array<CropType | null>> | null {
+    return value.length === 0 ? null : from_candid_vec_n16(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n20(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_CropType]): CropType | null {
-    return value.length === 0 ? null : from_candid_CropType_n21(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_CropType]): CropType | null {
+    return value.length === 0 ? null : from_candid_CropType_n19(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_opt_n23(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
+function from_candid_opt_n21(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [string]): string | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n24(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
+function from_candid_opt_n22(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [bigint]): bigint | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n25(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_BattleStats]): BattleStats | null {
+function from_candid_opt_n23(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_BattleStats]): BattleStats | null {
     return value.length === 0 ? null : value[0];
 }
-function from_candid_opt_n4(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_GameState]): GameState | null {
-    return value.length === 0 ? null : from_candid_GameState_n5(_uploadFile, _downloadFile, value[0]);
+function from_candid_opt_n26(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_GameState]): GameState | null {
+    return value.length === 0 ? null : from_candid_GameState_n27(_uploadFile, _downloadFile, value[0]);
 }
-function from_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_opt_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [_UserProfile]): UserProfile | null {
+    return value.length === 0 ? null : from_candid_UserProfile_n7(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_opt_n9(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: [] | [Array<Array<_StructureType>>]): Array<Array<StructureType>> | null {
+    return value.length === 0 ? null : from_candid_vec_n10(_uploadFile, _downloadFile, value[0]);
+}
+function from_candid_record_n28(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    mode: _GameMode;
+    score: bigint;
+    state: _GameRunState;
+    coinsEarned: bigint;
+}): {
+    mode: GameMode;
+    score: bigint;
+    state: GameRunState;
+    coinsEarned: bigint;
+} {
+    return {
+        mode: from_candid_GameMode_n29(_uploadFile, _downloadFile, value.mode),
+        score: value.score,
+        state: from_candid_GameRunState_n4(_uploadFile, _downloadFile, value.state),
+        coinsEarned: value.coinsEarned
+    };
+}
+function from_candid_record_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     cityLayout: [] | [Array<Array<_StructureType>>];
     lastPlayed: _Time;
     minigameScores: [] | [_MinigameScores];
@@ -306,36 +440,18 @@ function from_candid_record_n10(_uploadFile: (file: ExternalBlob) => Promise<Uin
     bestScores: BestScores;
 } {
     return {
-        cityLayout: record_opt_to_undefined(from_candid_opt_n11(_uploadFile, _downloadFile, value.cityLayout)),
+        cityLayout: record_opt_to_undefined(from_candid_opt_n9(_uploadFile, _downloadFile, value.cityLayout)),
         lastPlayed: value.lastPlayed,
-        minigameScores: record_opt_to_undefined(from_candid_opt_n16(_uploadFile, _downloadFile, value.minigameScores)),
-        farmPlots: record_opt_to_undefined(from_candid_opt_n17(_uploadFile, _downloadFile, value.farmPlots)),
-        displayName: record_opt_to_undefined(from_candid_opt_n23(_uploadFile, _downloadFile, value.displayName)),
-        bestTime: record_opt_to_undefined(from_candid_opt_n24(_uploadFile, _downloadFile, value.bestTime)),
+        minigameScores: record_opt_to_undefined(from_candid_opt_n14(_uploadFile, _downloadFile, value.minigameScores)),
+        farmPlots: record_opt_to_undefined(from_candid_opt_n15(_uploadFile, _downloadFile, value.farmPlots)),
+        displayName: record_opt_to_undefined(from_candid_opt_n21(_uploadFile, _downloadFile, value.displayName)),
+        bestTime: record_opt_to_undefined(from_candid_opt_n22(_uploadFile, _downloadFile, value.bestTime)),
         totalCoins: value.totalCoins,
-        battleStats: record_opt_to_undefined(from_candid_opt_n25(_uploadFile, _downloadFile, value.battleStats)),
+        battleStats: record_opt_to_undefined(from_candid_opt_n23(_uploadFile, _downloadFile, value.battleStats)),
         bestScores: value.bestScores
     };
 }
-function from_candid_record_n6(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    mode: _GameMode;
-    score: bigint;
-    state: _GameRunState;
-    coinsEarned: bigint;
-}): {
-    mode: GameMode;
-    score: bigint;
-    state: GameRunState;
-    coinsEarned: bigint;
-} {
-    return {
-        mode: from_candid_GameMode_n7(_uploadFile, _downloadFile, value.mode),
-        score: value.score,
-        state: from_candid_GameRunState_n2(_uploadFile, _downloadFile, value.state),
-        coinsEarned: value.coinsEarned
-    };
-}
-function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     house: null;
 } | {
     park: null;
@@ -344,7 +460,7 @@ function from_candid_variant_n15(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }): StructureType {
     return "house" in value ? StructureType.house : "park" in value ? StructureType.park : "shop" in value ? StructureType.shop : value;
 }
-function from_candid_variant_n22(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n20(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     tomato: null;
 } | {
     carrot: null;
@@ -353,16 +469,16 @@ function from_candid_variant_n22(_uploadFile: (file: ExternalBlob) => Promise<Ui
 }): CropType {
     return "tomato" in value ? CropType.tomato : "carrot" in value ? CropType.carrot : "wheat" in value ? CropType.wheat : value;
 }
-function from_candid_variant_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
-    start: null;
+function from_candid_variant_n25(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    admin: null;
 } | {
-    gameOver: null;
+    user: null;
 } | {
-    running: null;
-}): GameRunState {
-    return "start" in value ? GameRunState.start : "gameOver" in value ? GameRunState.gameOver : "running" in value ? GameRunState.running : value;
+    guest: null;
+}): UserRole {
+    return "admin" in value ? UserRole.admin : "user" in value ? UserRole.user : "guest" in value ? UserRole.guest : value;
 }
-function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+function from_candid_variant_n30(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
     car: null;
 } | {
     farming: null;
@@ -377,25 +493,127 @@ function from_candid_variant_n8(_uploadFile: (file: ExternalBlob) => Promise<Uin
 }): GameMode {
     return "car" in value ? GameMode.car : "farming" in value ? GameMode.farming : "endlessRun" in value ? GameMode.endlessRun : "battle" in value ? GameMode.battle : "cityBuilder" in value ? GameMode.cityBuilder : "indoor" in value ? GameMode.indoor : value;
 }
-function from_candid_vec_n12(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Array<_StructureType>>): Array<Array<StructureType>> {
-    return value.map((x)=>from_candid_vec_n13(_uploadFile, _downloadFile, x));
+function from_candid_variant_n5(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    start: null;
+} | {
+    gameOver: null;
+} | {
+    running: null;
+}): GameRunState {
+    return "start" in value ? GameRunState.start : "gameOver" in value ? GameRunState.gameOver : "running" in value ? GameRunState.running : value;
 }
-function from_candid_vec_n13(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_StructureType>): Array<StructureType> {
-    return value.map((x)=>from_candid_StructureType_n14(_uploadFile, _downloadFile, x));
+function from_candid_vec_n10(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Array<_StructureType>>): Array<Array<StructureType>> {
+    return value.map((x)=>from_candid_vec_n11(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n18(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Array<[] | [_CropType]>>): Array<Array<CropType | null>> {
-    return value.map((x)=>from_candid_vec_n19(_uploadFile, _downloadFile, x));
+function from_candid_vec_n11(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<_StructureType>): Array<StructureType> {
+    return value.map((x)=>from_candid_StructureType_n12(_uploadFile, _downloadFile, x));
 }
-function from_candid_vec_n19(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<[] | [_CropType]>): Array<CropType | null> {
-    return value.map((x)=>from_candid_opt_n20(_uploadFile, _downloadFile, x));
+function from_candid_vec_n16(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Array<[] | [_CropType]>>): Array<Array<CropType | null>> {
+    return value.map((x)=>from_candid_vec_n17(_uploadFile, _downloadFile, x));
 }
-function to_candid_GameMode_n26(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: GameMode): _GameMode {
-    return to_candid_variant_n27(_uploadFile, _downloadFile, value);
+function from_candid_vec_n17(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<[] | [_CropType]>): Array<CropType | null> {
+    return value.map((x)=>from_candid_opt_n18(_uploadFile, _downloadFile, x));
 }
-function to_candid_opt_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: string | null): [] | [string] {
+function to_candid_CropType_n40(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CropType): _CropType {
+    return to_candid_variant_n41(_uploadFile, _downloadFile, value);
+}
+function to_candid_GameMode_n42(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: GameMode): _GameMode {
+    return to_candid_variant_n43(_uploadFile, _downloadFile, value);
+}
+function to_candid_StructureType_n35(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: StructureType): _StructureType {
+    return to_candid_variant_n36(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserProfile_n31(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserProfile): _UserProfile {
+    return to_candid_record_n32(_uploadFile, _downloadFile, value);
+}
+function to_candid_UserRole_n1(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): _UserRole {
+    return to_candid_variant_n2(_uploadFile, _downloadFile, value);
+}
+function to_candid_opt_n3(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: string | null): [] | [string] {
     return value === null ? candid_none() : candid_some(value);
 }
-function to_candid_variant_n27(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: GameMode): {
+function to_candid_opt_n39(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CropType | null): [] | [_CropType] {
+    return value === null ? candid_none() : candid_some(to_candid_CropType_n40(_uploadFile, _downloadFile, value));
+}
+function to_candid_record_n32(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: {
+    cityLayout?: Array<Array<StructureType>>;
+    lastPlayed: Time;
+    minigameScores?: MinigameScores;
+    farmPlots?: Array<Array<CropType | null>>;
+    displayName?: string;
+    bestTime?: bigint;
+    totalCoins: bigint;
+    battleStats?: BattleStats;
+    bestScores: BestScores;
+}): {
+    cityLayout: [] | [Array<Array<_StructureType>>];
+    lastPlayed: _Time;
+    minigameScores: [] | [_MinigameScores];
+    farmPlots: [] | [Array<Array<[] | [_CropType]>>];
+    displayName: [] | [string];
+    bestTime: [] | [bigint];
+    totalCoins: bigint;
+    battleStats: [] | [_BattleStats];
+    bestScores: _BestScores;
+} {
+    return {
+        cityLayout: value.cityLayout ? candid_some(to_candid_vec_n33(_uploadFile, _downloadFile, value.cityLayout)) : candid_none(),
+        lastPlayed: value.lastPlayed,
+        minigameScores: value.minigameScores ? candid_some(value.minigameScores) : candid_none(),
+        farmPlots: value.farmPlots ? candid_some(to_candid_vec_n37(_uploadFile, _downloadFile, value.farmPlots)) : candid_none(),
+        displayName: value.displayName ? candid_some(value.displayName) : candid_none(),
+        bestTime: value.bestTime ? candid_some(value.bestTime) : candid_none(),
+        totalCoins: value.totalCoins,
+        battleStats: value.battleStats ? candid_some(value.battleStats) : candid_none(),
+        bestScores: value.bestScores
+    };
+}
+function to_candid_variant_n2(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: UserRole): {
+    admin: null;
+} | {
+    user: null;
+} | {
+    guest: null;
+} {
+    return value == UserRole.admin ? {
+        admin: null
+    } : value == UserRole.user ? {
+        user: null
+    } : value == UserRole.guest ? {
+        guest: null
+    } : value;
+}
+function to_candid_variant_n36(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: StructureType): {
+    house: null;
+} | {
+    park: null;
+} | {
+    shop: null;
+} {
+    return value == StructureType.house ? {
+        house: null
+    } : value == StructureType.park ? {
+        park: null
+    } : value == StructureType.shop ? {
+        shop: null
+    } : value;
+}
+function to_candid_variant_n41(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: CropType): {
+    tomato: null;
+} | {
+    carrot: null;
+} | {
+    wheat: null;
+} {
+    return value == CropType.tomato ? {
+        tomato: null
+    } : value == CropType.carrot ? {
+        carrot: null
+    } : value == CropType.wheat ? {
+        wheat: null
+    } : value;
+}
+function to_candid_variant_n43(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: GameMode): {
     car: null;
 } | {
     farming: null;
@@ -421,6 +639,18 @@ function to_candid_variant_n27(_uploadFile: (file: ExternalBlob) => Promise<Uint
     } : value == GameMode.indoor ? {
         indoor: null
     } : value;
+}
+function to_candid_vec_n33(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Array<StructureType>>): Array<Array<_StructureType>> {
+    return value.map((x)=>to_candid_vec_n34(_uploadFile, _downloadFile, x));
+}
+function to_candid_vec_n34(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<StructureType>): Array<_StructureType> {
+    return value.map((x)=>to_candid_StructureType_n35(_uploadFile, _downloadFile, x));
+}
+function to_candid_vec_n37(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<Array<CropType | null>>): Array<Array<[] | [_CropType]>> {
+    return value.map((x)=>to_candid_vec_n38(_uploadFile, _downloadFile, x));
+}
+function to_candid_vec_n38(_uploadFile: (file: ExternalBlob) => Promise<Uint8Array>, _downloadFile: (file: Uint8Array) => Promise<ExternalBlob>, value: Array<CropType | null>): Array<[] | [_CropType]> {
+    return value.map((x)=>to_candid_opt_n39(_uploadFile, _downloadFile, x));
 }
 export interface CreateActorOptions {
     agent?: Agent;

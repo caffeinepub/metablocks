@@ -1,10 +1,10 @@
 {
-  "frontend/src/App.tsx": "Main application component with TanStack Router setup for all game modes, pages, and theme provider integration.",
-  "frontend/src/components/AppLayout.tsx": "Shared layout component with header, navigation, coin display, auth status, and footer used across all pages.",
+  "frontend/src/App.tsx": "Main application component with TanStack Router setup for PS PUZZLE hub and five puzzle game routes (sliding tiles, memory match, word scramble, sudoku mini, lights out).",
+  "frontend/src/components/AppLayout.tsx": "Shared layout component with header displaying \"PS PUZZLE\" branding, navigation, coin display, auth status, and footer used across all pages.",
   "frontend/src/components/AuthStatus.tsx": "Authentication status widget displaying sign-in/out controls and shortened principal using Internet Identity.",
-  "frontend/src/components/RequireSignInDialog.tsx": "Alert dialog prompting users to sign in when attempting to access progress-persisting game modes.",
+  "frontend/src/components/RequireSignInDialog.tsx": "Alert dialog prompting users to sign in when attempting to save best scores in PS PUZZLE games.",
   "frontend/src/components/ModeTile.tsx": "Reusable card component for displaying game mode tiles with icon, description, and best score.",
-  "frontend/src/pages/HubPage.tsx": "Main hub page displaying Metablocks logo, hero section, and grid of 6 game mode tiles with navigation.",
+  "frontend/src/pages/HubPage.tsx": "PS PUZZLE hub page displaying logo, hero section with background image, and grid of 5 puzzle tiles with navigation to individual puzzle games.",
   "frontend/src/pages/LeaderboardPage.tsx": "Leaderboard page with tabbed interface for viewing top players across all game modes.",
   "frontend/src/pages/modes/EndlessRunPage.tsx": "Endless runner game with jump mechanics, obstacle avoidance, scoring, and progress persistence using proper GameMode enum and useRef initialization.",
   "frontend/src/pages/modes/CityBuilderPage.tsx": "Grid-based city builder allowing placement of 3 structure types with coin costs and layout persistence.",
@@ -21,5 +21,11 @@
   "frontend/src/hooks/useCarRacing.ts": "Hook for saving and retrieving best race times with backend persistence, using GameMode.car enum value.",
   "frontend/src/hooks/useBattle.ts": "Hook for managing battle statistics including wins count and best streak, using GameMode.battle enum value.",
   "frontend/src/index.css": "Global styles with warm earth-toned OKLCH color system for light and dark modes, avoiding blue/purple dominance.",
-  "frontend/tailwind.config.js": "Tailwind configuration with custom color tokens, border radius, shadows, and Inter font family."
+  "frontend/tailwind.config.js": "Tailwind configuration with custom color tokens, border radius, shadows, and Inter font family.",
+  "frontend/src/hooks/usePuzzleBestScores.ts": "React Query hook for saving puzzle best scores to the backend with cache invalidation, using existing game mode enums.",
+  "frontend/src/pages/puzzles/SlidingTilesPage.tsx": "Sliding tiles puzzle game with 3x3 grid, move counting, completion detection, score calculation, and best score saving with sign-in gating.",
+  "frontend/src/pages/puzzles/MemoryMatchPage.tsx": "Memory match card game with 16 cards (8 pairs), flip mechanics, move counting, completion detection, and best score saving with sign-in gating.",
+  "frontend/src/pages/puzzles/WordScramblePage.tsx": "Word scramble puzzle game with random word selection, 3 attempts, guess validation, score calculation based on attempts, and best score saving with sign-in gating.",
+  "frontend/src/pages/puzzles/SudokuMiniPage.tsx": "4x4 sudoku puzzle game with pre-generated solutions, mistake tracking, completion validation, and best score saving with sign-in gating.",
+  "frontend/src/pages/puzzles/LightsOutPage.tsx": "Lights Out puzzle game with 5x5 grid, toggle mechanics affecting adjacent cells, move counting, completion detection, and best score saving with sign-in gating."
 }

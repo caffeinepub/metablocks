@@ -1,21 +1,14 @@
 # Specification
 
 ## Summary
-**Goal:** Build the Metablocks online game hub with Internet Identity sign-in, multiple playable MVP game modes, persistent player progression, leaderboards, and a cohesive non-blue/purple-dominant visual theme.
+**Goal:** Rebrand the app as **PS PUZZLE** and deliver a puzzle-collection hub with at least five playable puzzle mini-games, including optional signed-in best-score persistence.
 
 **Planned changes:**
-- Create the Metablocks hub UI showing 6 modes (Endless Run, City Builder, Farming, Indoor, Car, Battle) plus a Leaderboard screen; enable entering/exiting modes without page reloads.
-- Integrate Internet Identity sign-in/out and display signed-in state (including principal/identifier); gate saving/loading of online progress behind sign-in.
-- Implement a single Motoko backend actor for per-principal persistence: player profile (optional display name), total coins, per-mode best scores/times, last played timestamps, and mode-specific saved states; expose getPlayer(), upsertPlayerProgress(...), and getLeaderboard(mode, limit).
-- Implement MVP versions of each mode:
-  - Endless Run: start/running/game-over loop with score and coin rewards; persist results on game over for signed-in users.
-  - City Builder: grid placement with at least 3 building types/costs; validate coins; persist/reload city layout for signed-in users.
-  - Farming: at least 3 crops with plant→grow (time-based)→harvest loop; persist plots and growth via timestamps for signed-in users.
-  - Indoor: submenu with at least 2 minigames, each with scoring/end condition and coin rewards; persist best scores for signed-in users.
-  - Car: simple time-trial with timer and best time; persist best time for signed-in users.
-  - Battle: turn-based player vs CPU with HP/attack and at least 3 actions; persist wins count and best streak (or equivalent) for signed-in users.
-- Add a global leaderboard UI that can switch per mode and shows top entries plus signed-in user rank when available.
-- Apply a cohesive visual theme across hub and all modes (consistent styling, readable/accessibile), avoiding blue/purple as the primary palette.
-- Add and render generated static branding/UI images from frontend static assets (logo, hub background, and per-mode icons).
+- Update global layout and hub branding text from “Metablocks” to “PS PUZZLE” across user-facing UI.
+- Replace the current home ("/") experience with a PS PUZZLE hub that shows a tile/grid menu of puzzle mini-games (title, short description, icon) and launches each puzzle screen.
+- Implement at least 5 distinct puzzle mini-games, each with a start/new game action, reset/retry, an end/completion state, and a displayed numeric score, plus navigation back to the hub.
+- Add signed-in persistence for best scores per puzzle (keyed by Internet Identity principal), and display best scores on the hub when available; keep puzzles playable while signed out with saving gated behind sign-in.
+- Update routing so each puzzle is a first-class route and remove/disable entry points to the old Metablocks mode routes from the primary hub experience.
+- Add and use new static branding assets (logo, hub background) and puzzle icons from `frontend/public/assets/generated` in the PS PUZZLE hub UI.
 
-**User-visible outcome:** Users can open Metablocks, sign in with Internet Identity, choose any of the 6 modes from a themed hub, play each mini-game, earn coins, and (when signed in) have their progress saved and reflected in the hub and leaderboards across sessions.
+**User-visible outcome:** Users land on a PS PUZZLE hub with puzzle tiles that launch at least five different puzzle mini-games; each game tracks a numeric score and ends with a completion state, and signed-in users can save and see their best scores per puzzle on the hub.

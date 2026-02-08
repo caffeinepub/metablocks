@@ -10,15 +10,21 @@ import Timer "mo:core/Timer";
 import Order "mo:core/Order";
 import Runtime "mo:core/Runtime";
 import Principal "mo:core/Principal";
+import MixinAuthorization "authorization/MixinAuthorization";
+import AccessControl "authorization/access-control";
 
 actor {
+  // Initialize the access control system
+  let accessControlState = AccessControl.initState();
+  include MixinAuthorization(accessControlState);
+
   module GameRunState {
     public type T = { #start; #running; #gameOver };
   };
 
   type GameRunState = GameRunState.T;
 
-  type PlayerProfile = {
+  public type UserProfile = {
     displayName : ?Text;
     totalCoins : Nat;
     bestScores : BestScores;
@@ -128,14 +134,40 @@ actor {
     battle : ?Time.Time;
   };
 
-  let playerData = Map.empty<Principal, PlayerProfile>();
+  let playerData = Map.empty<Principal, UserProfile>();
   var globalGameState : ?GameState = null;
+
+  // Required user profile functions per instructions
+  public query ({ caller }) func getCallerUserProfile() : async ?UserProfile {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can access profiles");
+    };
+    playerData.get(caller);
+  };
+
+  public query ({ caller }) func getUserProfile(user : Principal) : async ?UserProfile {
+    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only view your own profile");
+    };
+    playerData.get(user);
+  };
+
+  public shared ({ caller }) func saveCallerUserProfile(profile : UserProfile) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can save profiles");
+    };
+    playerData.add(caller, profile);
+  };
 
   // Persistent Player Logic
   public shared ({ caller }) func createOrUpdatePlayerData(displayName : ?Text) : async () {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can create or update player data");
+    };
+
     switch (playerData.get(caller)) {
       case (null) {
-        let newProfile : PlayerProfile = {
+        let newProfile : UserProfile = {
           displayName;
           totalCoins = 0;
           bestScores = {
@@ -156,7 +188,7 @@ actor {
         playerData.add(caller, newProfile);
       };
       case (?profile) {
-        let updatedProfile : PlayerProfile = {
+        let updatedProfile : UserProfile = {
           profile with displayName;
         };
         playerData.add(caller, updatedProfile);
@@ -166,6 +198,10 @@ actor {
 
   // Game loop logic
   public shared ({ caller }) func startGame(mode : GameMode) : async GameRunState {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can start games");
+    };
+
     globalGameState := ?{
       mode;
       state = #running;
@@ -176,6 +212,10 @@ actor {
   };
 
   public shared ({ caller }) func updateGame(score : Nat) : async GameRunState {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can update games");
+    };
+
     switch (globalGameState) {
       case (null) { Runtime.trap("No game in progress") };
       case (?_) {
@@ -194,13 +234,17 @@ actor {
   };
 
   public shared ({ caller }) func endGame() : async GameRunState {
+    if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
+      Runtime.trap("Unauthorized: Only users can end games");
+    };
+
     switch (globalGameState) {
       case (null) { Runtime.trap("No game in progress") };
       case (?state) {
         switch (playerData.get(caller)) {
           case (null) { Runtime.trap("Player data not found") };
           case (?profile) {
-            let updatedProfile : PlayerProfile = {
+            let updatedProfile : UserProfile = {
               profile with
               totalCoins = profile.totalCoins + state.coinsEarned;
               bestScores = updateBestScores(profile.bestScores, state.mode, state.score);
@@ -226,7 +270,11 @@ actor {
     };
   };
 
-  public query ({ caller }) func getPlayerData(user : Principal) : async PlayerProfile {
+  public query ({ caller }) func getPlayerData(user : Principal) : async UserProfile {
+    if (caller != user and not AccessControl.isAdmin(accessControlState, caller)) {
+      Runtime.trap("Unauthorized: Can only view your own player data");
+    };
+
     switch (playerData.get(user)) {
       case (null) { Runtime.trap("Player not found") };
       case (?profile) { profile };
@@ -234,6 +282,7 @@ actor {
   };
 
   public query ({ caller }) func getGlobalGameState() : async ?GameState {
+    // Anyone can view the global game state (including guests)
     globalGameState;
   };
 };

@@ -41,7 +41,11 @@ export interface MinigameScores {
   'puzzleGame' : bigint,
   'reactionGame' : bigint,
 }
-export interface PlayerProfile {
+export type StructureType = { 'house' : null } |
+  { 'park' : null } |
+  { 'shop' : null };
+export type Time = bigint;
+export interface UserProfile {
   'cityLayout' : [] | [Array<Array<StructureType>>],
   'lastPlayed' : Time,
   'minigameScores' : [] | [MinigameScores],
@@ -52,15 +56,21 @@ export interface PlayerProfile {
   'battleStats' : [] | [BattleStats],
   'bestScores' : BestScores,
 }
-export type StructureType = { 'house' : null } |
-  { 'park' : null } |
-  { 'shop' : null };
-export type Time = bigint;
+export type UserRole = { 'admin' : null } |
+  { 'user' : null } |
+  { 'guest' : null };
 export interface _SERVICE {
+  '_initializeAccessControlWithSecret' : ActorMethod<[string], undefined>,
+  'assignCallerUserRole' : ActorMethod<[Principal, UserRole], undefined>,
   'createOrUpdatePlayerData' : ActorMethod<[[] | [string]], undefined>,
   'endGame' : ActorMethod<[], GameRunState>,
+  'getCallerUserProfile' : ActorMethod<[], [] | [UserProfile]>,
+  'getCallerUserRole' : ActorMethod<[], UserRole>,
   'getGlobalGameState' : ActorMethod<[], [] | [GameState]>,
-  'getPlayerData' : ActorMethod<[Principal], PlayerProfile>,
+  'getPlayerData' : ActorMethod<[Principal], UserProfile>,
+  'getUserProfile' : ActorMethod<[Principal], [] | [UserProfile]>,
+  'isCallerAdmin' : ActorMethod<[], boolean>,
+  'saveCallerUserProfile' : ActorMethod<[UserProfile], undefined>,
   'startGame' : ActorMethod<[GameMode], GameRunState>,
   'updateGame' : ActorMethod<[bigint], GameRunState>,
 }

@@ -3,12 +3,11 @@ import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import AppLayout from './components/AppLayout';
 import HubPage from './pages/HubPage';
-import EndlessRunPage from './pages/modes/EndlessRunPage';
-import CityBuilderPage from './pages/modes/CityBuilderPage';
-import FarmingPage from './pages/modes/FarmingPage';
-import IndoorPage from './pages/modes/IndoorPage';
-import CarPage from './pages/modes/CarPage';
-import BattlePage from './pages/modes/BattlePage';
+import SlidingTilesPage from './pages/puzzles/SlidingTilesPage';
+import MemoryMatchPage from './pages/puzzles/MemoryMatchPage';
+import WordScramblePage from './pages/puzzles/WordScramblePage';
+import SudokuMiniPage from './pages/puzzles/SudokuMiniPage';
+import LightsOutPage from './pages/puzzles/LightsOutPage';
 import LeaderboardPage from './pages/LeaderboardPage';
 
 const rootRoute = createRootRoute({
@@ -21,40 +20,34 @@ const indexRoute = createRoute({
   component: HubPage,
 });
 
-const endlessRunRoute = createRoute({
+const slidingTilesRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/endless-run',
-  component: EndlessRunPage,
+  path: '/puzzles/sliding',
+  component: SlidingTilesPage,
 });
 
-const cityBuilderRoute = createRoute({
+const memoryMatchRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/city-builder',
-  component: CityBuilderPage,
+  path: '/puzzles/memory',
+  component: MemoryMatchPage,
 });
 
-const farmingRoute = createRoute({
+const wordScrambleRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/farming',
-  component: FarmingPage,
+  path: '/puzzles/words',
+  component: WordScramblePage,
 });
 
-const indoorRoute = createRoute({
+const sudokuMiniRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/indoor',
-  component: IndoorPage,
+  path: '/puzzles/sudoku',
+  component: SudokuMiniPage,
 });
 
-const carRoute = createRoute({
+const lightsOutRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/car',
-  component: CarPage,
-});
-
-const battleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: '/battle',
-  component: BattlePage,
+  path: '/puzzles/lights-out',
+  component: LightsOutPage,
 });
 
 const leaderboardRoute = createRoute({
@@ -65,12 +58,11 @@ const leaderboardRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  endlessRunRoute,
-  cityBuilderRoute,
-  farmingRoute,
-  indoorRoute,
-  carRoute,
-  battleRoute,
+  slidingTilesRoute,
+  memoryMatchRoute,
+  wordScrambleRoute,
+  sudokuMiniRoute,
+  lightsOutRoute,
   leaderboardRoute,
 ]);
 

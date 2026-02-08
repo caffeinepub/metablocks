@@ -8,24 +8,15 @@
 
 import { IDL } from '@icp-sdk/core/candid';
 
+export const UserRole = IDL.Variant({
+  'admin' : IDL.Null,
+  'user' : IDL.Null,
+  'guest' : IDL.Null,
+});
 export const GameRunState = IDL.Variant({
   'start' : IDL.Null,
   'gameOver' : IDL.Null,
   'running' : IDL.Null,
-});
-export const GameMode = IDL.Variant({
-  'car' : IDL.Null,
-  'farming' : IDL.Null,
-  'endlessRun' : IDL.Null,
-  'battle' : IDL.Null,
-  'cityBuilder' : IDL.Null,
-  'indoor' : IDL.Null,
-});
-export const GameState = IDL.Record({
-  'mode' : GameMode,
-  'score' : IDL.Nat,
-  'state' : GameRunState,
-  'coinsEarned' : IDL.Nat,
 });
 export const StructureType = IDL.Variant({
   'house' : IDL.Null,
@@ -54,7 +45,7 @@ export const BestScores = IDL.Record({
   'cityBuilder' : IDL.Nat,
   'indoor' : IDL.Nat,
 });
-export const PlayerProfile = IDL.Record({
+export const UserProfile = IDL.Record({
   'cityLayout' : IDL.Opt(IDL.Vec(IDL.Vec(StructureType))),
   'lastPlayed' : Time,
   'minigameScores' : IDL.Opt(MinigameScores),
@@ -65,12 +56,37 @@ export const PlayerProfile = IDL.Record({
   'battleStats' : IDL.Opt(BattleStats),
   'bestScores' : BestScores,
 });
+export const GameMode = IDL.Variant({
+  'car' : IDL.Null,
+  'farming' : IDL.Null,
+  'endlessRun' : IDL.Null,
+  'battle' : IDL.Null,
+  'cityBuilder' : IDL.Null,
+  'indoor' : IDL.Null,
+});
+export const GameState = IDL.Record({
+  'mode' : GameMode,
+  'score' : IDL.Nat,
+  'state' : GameRunState,
+  'coinsEarned' : IDL.Nat,
+});
 
 export const idlService = IDL.Service({
+  '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+  'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
   'createOrUpdatePlayerData' : IDL.Func([IDL.Opt(IDL.Text)], [], []),
   'endGame' : IDL.Func([], [GameRunState], []),
+  'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+  'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
   'getGlobalGameState' : IDL.Func([], [IDL.Opt(GameState)], ['query']),
-  'getPlayerData' : IDL.Func([IDL.Principal], [PlayerProfile], ['query']),
+  'getPlayerData' : IDL.Func([IDL.Principal], [UserProfile], ['query']),
+  'getUserProfile' : IDL.Func(
+      [IDL.Principal],
+      [IDL.Opt(UserProfile)],
+      ['query'],
+    ),
+  'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+  'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
   'startGame' : IDL.Func([GameMode], [GameRunState], []),
   'updateGame' : IDL.Func([IDL.Nat], [GameRunState], []),
 });
@@ -78,24 +94,15 @@ export const idlService = IDL.Service({
 export const idlInitArgs = [];
 
 export const idlFactory = ({ IDL }) => {
+  const UserRole = IDL.Variant({
+    'admin' : IDL.Null,
+    'user' : IDL.Null,
+    'guest' : IDL.Null,
+  });
   const GameRunState = IDL.Variant({
     'start' : IDL.Null,
     'gameOver' : IDL.Null,
     'running' : IDL.Null,
-  });
-  const GameMode = IDL.Variant({
-    'car' : IDL.Null,
-    'farming' : IDL.Null,
-    'endlessRun' : IDL.Null,
-    'battle' : IDL.Null,
-    'cityBuilder' : IDL.Null,
-    'indoor' : IDL.Null,
-  });
-  const GameState = IDL.Record({
-    'mode' : GameMode,
-    'score' : IDL.Nat,
-    'state' : GameRunState,
-    'coinsEarned' : IDL.Nat,
   });
   const StructureType = IDL.Variant({
     'house' : IDL.Null,
@@ -124,7 +131,7 @@ export const idlFactory = ({ IDL }) => {
     'cityBuilder' : IDL.Nat,
     'indoor' : IDL.Nat,
   });
-  const PlayerProfile = IDL.Record({
+  const UserProfile = IDL.Record({
     'cityLayout' : IDL.Opt(IDL.Vec(IDL.Vec(StructureType))),
     'lastPlayed' : Time,
     'minigameScores' : IDL.Opt(MinigameScores),
@@ -135,12 +142,37 @@ export const idlFactory = ({ IDL }) => {
     'battleStats' : IDL.Opt(BattleStats),
     'bestScores' : BestScores,
   });
+  const GameMode = IDL.Variant({
+    'car' : IDL.Null,
+    'farming' : IDL.Null,
+    'endlessRun' : IDL.Null,
+    'battle' : IDL.Null,
+    'cityBuilder' : IDL.Null,
+    'indoor' : IDL.Null,
+  });
+  const GameState = IDL.Record({
+    'mode' : GameMode,
+    'score' : IDL.Nat,
+    'state' : GameRunState,
+    'coinsEarned' : IDL.Nat,
+  });
   
   return IDL.Service({
+    '_initializeAccessControlWithSecret' : IDL.Func([IDL.Text], [], []),
+    'assignCallerUserRole' : IDL.Func([IDL.Principal, UserRole], [], []),
     'createOrUpdatePlayerData' : IDL.Func([IDL.Opt(IDL.Text)], [], []),
     'endGame' : IDL.Func([], [GameRunState], []),
+    'getCallerUserProfile' : IDL.Func([], [IDL.Opt(UserProfile)], ['query']),
+    'getCallerUserRole' : IDL.Func([], [UserRole], ['query']),
     'getGlobalGameState' : IDL.Func([], [IDL.Opt(GameState)], ['query']),
-    'getPlayerData' : IDL.Func([IDL.Principal], [PlayerProfile], ['query']),
+    'getPlayerData' : IDL.Func([IDL.Principal], [UserProfile], ['query']),
+    'getUserProfile' : IDL.Func(
+        [IDL.Principal],
+        [IDL.Opt(UserProfile)],
+        ['query'],
+      ),
+    'isCallerAdmin' : IDL.Func([], [IDL.Bool], ['query']),
+    'saveCallerUserProfile' : IDL.Func([UserProfile], [], []),
     'startGame' : IDL.Func([GameMode], [GameRunState], []),
     'updateGame' : IDL.Func([IDL.Nat], [GameRunState], []),
   });

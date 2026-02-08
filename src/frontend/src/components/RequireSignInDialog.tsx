@@ -29,7 +29,7 @@ export default function RequireSignInDialog({ open, onOpenChange }: RequireSignI
         <AlertDialogHeader>
           <AlertDialogTitle>Sign In Required</AlertDialogTitle>
           <AlertDialogDescription>
-            You need to sign in to save your progress and compete on the leaderboard. Sign in now to continue?
+            You need to sign in to save your best scores in PS PUZZLE. Sign in now to continue?
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

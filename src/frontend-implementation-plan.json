@@ -1,466 +1,241 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Metablocks: Frontend multi-mode game hub with Internet Identity, mini-games, theme, and static branding assets",
+  "title": "PS PUZZLE — Puzzle-collection hub with 5 mini-games and best-score UX",
   "requirements": [
     {
-      "id": "REQ-1",
-      "summary": "Create Metablocks SPA structure with a main hub that navigates to 6 game modes and back without reloads.",
+      "id": "REQ-13",
+      "summary": "Rebrand all prominent UI text from Metablocks to PS PUZZLE.",
       "acceptanceCriteria": [
-        "App title/branding uses the name \"Metablocks\" in the UI.",
-        "A hub/menu screen exists and clearly shows the 6 modes: Endless Run, City Builder, Farming, Indoor, Car, Battle.",
-        "Each mode can be entered from the hub and exited back to the hub without page reloads."
+        "The header title in the global layout shows \"PS PUZZLE\" instead of \"METABLOCKS\".",
+        "The hub page hero title and primary branding text show \"PS PUZZLE\".",
+        "No prominent UI text elements still reference \"Metablocks\" (excluding any unavoidable legacy identifiers such as package/canister names)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/AppLayout.tsx",
+          "operation": "modify",
+          "description": "Update the global header title text from \"METABLOCKS\" to \"PS PUZZLE\" and ensure any other prominent layout branding text follows the new name. Use existing shadcn-ui Button component as currently composed; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HubPage.tsx",
+          "operation": "modify",
+          "description": "Update hero heading/alt text/branding copy to consistently use \"PS PUZZLE\" in English and remove remaining prominent \"Metablocks\" text from the hub experience. Use existing shadcn-ui Button and existing ModeTile; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/RequireSignInDialog.tsx",
+          "operation": "modify",
+          "description": "Adjust dialog copy to reference saving PS PUZZLE best scores (English-only) while keeping behavior and shadcn-ui AlertDialog composition intact. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-14",
+      "summary": "Replace the home hub with a PS PUZZLE puzzle-collection grid that launches each puzzle via tiles.",
+      "acceptanceCriteria": [
+        "The home route (\"/\") displays a puzzle-collection hub for PS PUZZLE (not the 6-mode Metablocks hub).",
+        "The hub shows at least 5 distinct puzzle tiles/cards, each with a title, short description, and icon.",
+        "Clicking a puzzle tile navigates to that puzzle’s screen."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/HubPage.tsx",
+          "operation": "modify",
+          "description": "Replace the current 6-mode hub content with a PS PUZZLE puzzle hub that renders a grid of at least 5 puzzle tiles (title, short description, generated icon) and navigates to dedicated puzzle routes on click. Continue using the existing ModeTile component for the tile UI; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/ModeTile.tsx",
+          "operation": "modify",
+          "description": "Adapt ModeTile as needed to support puzzle tiles (e.g., consistent icon sizing and optional best-score display for puzzles) while continuing to compose shadcn-ui Card/Button. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-15",
+      "summary": "Add 5 playable puzzle mini-games with start/play/end loops, completion conditions, numeric scoring, and hub navigation.",
+      "acceptanceCriteria": [
+        "There are at least 5 puzzle mini-games available from the PS PUZZLE hub.",
+        "Each puzzle mini-game has: (1) a Start/New Game action, (2) a way to reset/retry, (3) an end/completion state, and (4) a displayed numeric score.",
+        "Each puzzle mini-game includes navigation back to the PS PUZZLE hub."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
+          "operation": "create",
+          "description": "Create a dedicated puzzle route page for a sliding-tiles puzzle (distinct from the old Indoor flow) with a Start/New Game action, Reset/Retry, a completion state (solved), numeric score display, and a \"Back to PS PUZZLE Hub\" action. Compose existing shadcn-ui Card/Button patterns; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
+          "operation": "create",
+          "description": "Create a memory match cards puzzle with a playable loop (Start, flips during play, completion when all pairs matched), numeric score (e.g., based on moves/time), reset/retry, and navigation back to PS PUZZLE hub. Compose shadcn-ui components for layout/controls; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/WordScramblePage.tsx",
+          "operation": "create",
+          "description": "Create a word scramble/anagram puzzle with Start/New round, interactive play (guess input), completion condition (correct guess or out-of-attempts), numeric score, retry/reset, and \"Back to PS PUZZLE Hub\" navigation. Compose shadcn-ui components for cards/buttons/inputs; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
+          "operation": "create",
+          "description": "Create a sudoku/number-grid mini puzzle with a Start/New puzzle action, interactive play, completion validation, numeric score (e.g., based on mistakes/time), reset/retry, and navigation back to PS PUZZLE hub. Compose shadcn-ui components for structure and controls; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/LightsOutPage.tsx",
+          "operation": "create",
+          "description": "Create a lights-out/grid-toggle puzzle with Start/New Game to generate a solvable grid, completion when all lights are off, numeric score (e.g., moves), reset/retry, and navigation back to PS PUZZLE hub. Compose shadcn-ui components for structure and controls; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HubPage.tsx",
+          "operation": "modify",
+          "description": "Wire the hub tiles to the 5 new puzzle routes (sliding, memory, words, sudoku, lights-out) and ensure there is a clear way back from each puzzle page to the hub. Continue using ModeTile for the tile grid; verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-16",
+      "summary": "Implement signed-in best-score UX for puzzles (save on completion when signed in; show best scores on hub; gate saving when signed out).",
+      "acceptanceCriteria": [
+        "When signed in, completing a puzzle mini-game saves a score to the backend and updates the player profile cache in the UI.",
+        "The PS PUZZLE hub shows the player’s best score per puzzle tile when signed in and data is available.",
+        "When signed out, puzzle games remain playable, but saving best scores is gated (e.g., prompts the user to sign in before saving)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/hooks/usePuzzleBestScores.ts",
+          "operation": "create",
+          "description": "Add a frontend hook that integrates with existing actor/profile querying to (a) read best scores per PS PUZZLE puzzle for the signed-in user and (b) expose a save-best-score helper to be called by puzzle pages on completion. Ensure it works with react-query caching patterns without modifying forbidden hooks. Verify selected component usage instructions (authorization + core-infrastructure patterns) before implementing."
+        },
+        {
+          "path": "frontend/src/pages/HubPage.tsx",
+          "operation": "modify",
+          "description": "Display the signed-in player’s best score per puzzle tile when available (from the puzzle best-score hook/profile data). When signed out, show tiles without best scores (or a subtle signed-out state) while keeping puzzles playable. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
+          "operation": "modify",
+          "description": "On puzzle completion, call the shared best-score save helper when signed in; if signed out, keep gameplay working but prompt/gate saving using the existing RequireSignInDialog. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
+          "operation": "modify",
+          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog while still showing the final numeric score and allowing retry/reset. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/WordScramblePage.tsx",
+          "operation": "modify",
+          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog. Ensure numeric score is displayed in both cases. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
+          "operation": "modify",
+          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog. Ensure numeric score is displayed and retry/reset works. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/LightsOutPage.tsx",
+          "operation": "modify",
+          "description": "On completion, attempt best-score save when signed in; otherwise gate with RequireSignInDialog. Ensure numeric score is displayed and retry/reset works. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/RequireSignInDialog.tsx",
+          "operation": "modify",
+          "description": "Make the dialog copy fit PS PUZZLE best-score saving and ensure it can be reused by puzzle pages for save gating without changing the underlying shadcn-ui composition. Verify the component's usage instructions before implementing."
+        }
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "summary": "Register first-class routes for each PS PUZZLE puzzle and remove old Metablocks mode entry points from the hub.",
+      "acceptanceCriteria": [
+        "All puzzle mini-games are reachable via stable routes registered in the router.",
+        "The primary hub no longer presents the Metablocks mode tiles (Endless Run/City Builder/Farming/Indoor/Car/Battle).",
+        "Navigating back from any puzzle returns the user to the PS PUZZLE hub without errors."
       ],
       "file_operations": [
         {
           "path": "frontend/src/App.tsx",
-          "operation": "create",
-          "description": "Create the main SPA shell with client-side routing for Hub, each of the 6 modes, and shared layout/branding using shadcn-ui primitives for consistent UI. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "create",
-          "description": "Create the Metablocks hub/menu screen listing the 6 modes with navigation actions and an always-available way back from each mode. Use shadcn-ui components (e.g., Card/Button) for the mode tiles. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/EndlessRunPage.tsx",
-          "operation": "create",
-          "description": "Create the Endless Run route/page container with an Exit-to-Hub control (navigation only; game logic handled under REQ-4). Use shadcn-ui layout components for header/actions. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/CityBuilderPage.tsx",
-          "operation": "create",
-          "description": "Create the City Builder route/page container with an Exit-to-Hub control (navigation only; builder logic handled under REQ-5). Use shadcn-ui layout components. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/FarmingPage.tsx",
-          "operation": "create",
-          "description": "Create the Farming route/page container with an Exit-to-Hub control (navigation only; farming logic handled under REQ-6). Use shadcn-ui layout components. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/IndoorPage.tsx",
-          "operation": "create",
-          "description": "Create the Indoor route/page container with an Indoor submenu entry area and Exit-to-Hub control (minigames handled under REQ-7). Use shadcn-ui components for submenu. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/CarPage.tsx",
-          "operation": "create",
-          "description": "Create the Car mode route/page container with an Exit-to-Hub control (racing/time-trial logic handled under REQ-8). Use shadcn-ui layout components. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/BattlePage.tsx",
-          "operation": "create",
-          "description": "Create the Battle mode route/page container with an Exit-to-Hub control (battle logic handled under REQ-9). Use shadcn-ui layout components. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/LeaderboardPage.tsx",
-          "operation": "create",
-          "description": "Create a Leaderboard route/page accessible from the hub (data wiring handled under REQ-10). Use shadcn-ui Table/Tabs-like components where available. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/AppLayout.tsx",
-          "operation": "create",
-          "description": "Create a shared layout component (header/title, coin display slot, navigation actions) used by hub and all mode pages to ensure consistent structure. Use shadcn-ui components for the header/actions. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/ModeTile.tsx",
-          "operation": "create",
-          "description": "Create a reusable mode tile/card component for the hub, supporting icon + label + action. Use shadcn-ui Card/Button for styling consistency. Verify the component's usage instructions before implementing."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Add Internet Identity sign-in/out UI and gate persistence actions behind authentication.",
-      "acceptanceCriteria": [
-        "Signed-out users can view the hub but are prompted to sign in when attempting to start a mode that persists progress.",
-        "Signed-in users see their principal (or a shortened identifier) displayed somewhere in the hub UI.",
-        "Sign-in/out works without modifying any files in the immutable paths list."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/AuthStatus.tsx",
-          "operation": "create",
-          "description": "Create an auth status widget that uses the existing useInternetIdentity hook to show signed-in vs signed-out state, display a shortened principal when signed in, and provide Sign in/Sign out actions. Use shadcn-ui Button/Dropdown-like primitives if available. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/RequireSignInDialog.tsx",
-          "operation": "create",
-          "description": "Create a reusable prompt shown when a signed-out user tries to enter a progress-persisting mode; the dialog should trigger the useInternetIdentity.login action. Use shadcn-ui Dialog/AlertDialog primitives if available. Verify the component's usage instructions before implementing."
+          "operation": "modify",
+          "description": "Add TanStack Router routes for the 5 PS PUZZLE puzzles (e.g., /puzzles/sliding, /puzzles/memory, /puzzles/words, /puzzles/sudoku, /puzzles/lights-out) and ensure they are attached to the root layout. Keep existing routes intact but ensure the home route points to the PS PUZZLE hub experience. Verify router patterns before implementing."
         },
         {
           "path": "frontend/src/pages/HubPage.tsx",
           "operation": "modify",
-          "description": "Wire AuthStatus into the hub header and gate mode entry: signed-out users can browse the hub but attempting to enter a mode that persists progress shows RequireSignInDialog (or equivalent inline prompt) instead of navigating."
+          "description": "Remove/disable the old Metablocks mode tiles from the primary hub grid and replace them with PS PUZZLE puzzle tiles that navigate to the newly registered puzzle routes. Verify the component's usage instructions before implementing."
         },
         {
-          "path": "frontend/src/components/AppLayout.tsx",
+          "path": "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
           "operation": "modify",
-          "description": "Add an optional auth area slot (or include AuthStatus directly) to ensure sign-in/out state is visible across the app without editing immutable files. Use shadcn-ui layout primitives. Verify the component's usage instructions before implementing."
+          "description": "Ensure the page uses router navigation back to the PS PUZZLE hub route (\"/\") and does not rely on the old IndoorPage back links. Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
+          "operation": "modify",
+          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/WordScramblePage.tsx",
+          "operation": "modify",
+          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
+          "operation": "modify",
+          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/pages/puzzles/LightsOutPage.tsx",
+          "operation": "modify",
+          "description": "Ensure stable router-based navigation back to the PS PUZZLE hub route (\"/\"). Verify the component's usage instructions before implementing."
         }
       ]
     },
     {
-      "id": "REQ-4",
-      "summary": "Implement Endless Run as a simple playable 2D game loop with scoring and coin rewards, and persist results for signed-in users.",
+      "id": "REQ-18",
+      "summary": "Add PS PUZZLE generated branding/images as static assets and use them in the hub and tiles.",
       "acceptanceCriteria": [
-        "Endless Run has a start action, an in-game state, and a game-over state.",
-        "A score is displayed during the run and a final score is shown on game over.",
-        "For signed-in users, the final score and earned coins are persisted and visible after returning to the hub (e.g., best score or total coins updates)."
+        "The PS PUZZLE hub uses the generated logo and background images as part of its hero/branding area.",
+        "Each puzzle tile uses a corresponding generated icon from /assets/generated.",
+        "No generated images are served via backend endpoints; all are referenced as static files."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/modes/EndlessRunPage.tsx",
-          "operation": "modify",
-          "description": "Implement a simple 2D endless-run loop (start/running/game over) using React state + requestAnimationFrame (or timer) mechanics, displaying live score and game-over summary, plus an Exit-to-Hub control. Use shadcn-ui Buttons/Panels for UI. Verify the component's usage instructions before implementing."
+          "path": "frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png",
+          "operation": "create",
+          "description": "Add the generated PS PUZZLE logo asset as a static file at frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png."
         },
         {
-          "path": "frontend/src/hooks/usePlayerProfile.ts",
+          "path": "frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png",
           "operation": "create",
-          "description": "Create a React Query hook that loads the signed-in user's player profile via the actor (using existing core-infrastructure connection patterns via useActor) and exposes refresh/invalidation helpers for when modes persist progress. Verify the component's usage instructions before implementing."
+          "description": "Add the generated PS PUZZLE hub background image as a static file at frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png."
         },
         {
-          "path": "frontend/src/hooks/useProgressPersistence.ts",
+          "path": "frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png",
           "operation": "create",
-          "description": "Create a small persistence helper hook that, when signed in, calls the backend capability to upsert progress (e.g., mode best score + coins earned + last played). Keep it mode-agnostic so other modes can reuse it. Verify the component's usage instructions before implementing."
+          "description": "Add the generated sliding tiles puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated memory match puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated word scramble/anagram puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated sudoku/number grid puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png."
+        },
+        {
+          "path": "frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png",
+          "operation": "create",
+          "description": "Add the generated lights-out/grid toggle puzzle icon as a static file at frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png."
         },
         {
           "path": "frontend/src/pages/HubPage.tsx",
           "operation": "modify",
-          "description": "Display updated total coins and per-mode best score for Endless Run (as available) after returning from the mode by consuming usePlayerProfile and refreshing after a successful save."
-        },
-        {
-          "path": "frontend/src/backend.d.ts",
-          "operation": "modify",
-          "description": "Update the frontend type declarations to include the backend capabilities required by the product requirements for progress persistence and leaderboards (e.g., getPlayer(), upsertPlayerProgress(...), getLeaderboard(mode, limit)) so the frontend can compile against the intended contract."
-        }
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "summary": "Implement City Builder as a simple grid builder with 3 structures and coin costs, persisting layout for signed-in users.",
-      "acceptanceCriteria": [
-        "City Builder displays a grid and allows placing at least 3 building types with different costs.",
-        "Placing a building reduces the player’s coin total (with validation to prevent negative coins).",
-        "For signed-in users, the city layout persists: after leaving and re-entering City Builder, the previously placed buildings are restored."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/modes/CityBuilderPage.tsx",
-          "operation": "modify",
-          "description": "Implement a grid-based builder UI with at least 3 structure types and different costs, including selection + placement interactions, coin validation (no negative coins), and an Exit-to-Hub control. Use shadcn-ui components for controls/panels. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/city/CityGrid.tsx",
-          "operation": "create",
-          "description": "Create a CityGrid component to render the grid cells and placed structures, supporting click-to-place interactions. Use shadcn-ui styling utilities where appropriate. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/city/StructurePalette.tsx",
-          "operation": "create",
-          "description": "Create a structure picker (3 types) that shows coin costs and selected state. Use shadcn-ui Button/Card components. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useProgressPersistence.ts",
-          "operation": "modify",
-          "description": "Extend the persistence helper to support saving/loading city layout for signed-in users, and to coordinate coin spending updates."
-        },
-        {
-          "path": "frontend/src/hooks/usePlayerProfile.ts",
-          "operation": "modify",
-          "description": "Ensure the player profile hook exposes city layout and total coins needed by City Builder and refreshes when changes are persisted."
-        }
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "summary": "Implement Farming with plant→grow→harvest loop for 3 crops, with time-based growth and persistent farm state for signed-in users.",
-      "acceptanceCriteria": [
-        "Player can plant at least 3 crop types on farm plots.",
-        "Crops have a visible growing state and become harvestable after a duration.",
-        "For signed-in users, farm state persists across leaving/reloading the app, including growth progress based on timestamps."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/modes/FarmingPage.tsx",
-          "operation": "modify",
-          "description": "Implement a farm plots UI with 3 crop types, plant/grow/harvest loop, visible growth/harvestable states, coin rewards on harvest, and Exit-to-Hub navigation. Use shadcn-ui components for controls/status panels. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/farm/FarmGrid.tsx",
-          "operation": "create",
-          "description": "Create a FarmGrid component that renders plot cells, crop state, and interactions (plant/harvest). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/farm/CropPicker.tsx",
-          "operation": "create",
-          "description": "Create a crop selection control for the 3 crop types with basic info (grow time/reward). Use shadcn-ui Button/Card components. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useFarmTimers.ts",
-          "operation": "create",
-          "description": "Create a timer/clock helper that computes growth progress based on stored timestamps and current time, so growth persists correctly across navigation/reloads. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useProgressPersistence.ts",
-          "operation": "modify",
-          "description": "Extend persistence helper to save and reload farm plots and crop timestamps for signed-in users, and to apply harvest coin rewards to total coins."
-        }
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "summary": "Implement Indoor mode with 2 minigames (reaction + puzzle), each with scoring/coin rewards and persistent best scores for signed-in users.",
-      "acceptanceCriteria": [
-        "Indoor mode contains at least 2 distinct playable minigames accessible from an Indoor submenu.",
-        "Each minigame has a score and an end condition.",
-        "For signed-in users, best scores per minigame are saved and shown when revisiting the Indoor mode."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/modes/IndoorPage.tsx",
-          "operation": "modify",
-          "description": "Implement an Indoor submenu with navigation to two minigames, display best scores (when available), and provide Exit-to-Hub navigation. Use shadcn-ui Tabs/Buttons/Cards where available. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/indoor/ReactionGame.tsx",
-          "operation": "create",
-          "description": "Create a simple reaction minigame with a clear start, timed prompt, scoring, end condition, coin reward, and a way back to the Indoor submenu. Use shadcn-ui components for UI. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/modes/indoor/PuzzleGame.tsx",
-          "operation": "create",
-          "description": "Create a simple puzzle minigame (e.g., small tile/order puzzle) with scoring, end condition, coin reward, and a way back to the Indoor submenu. Use shadcn-ui components for UI. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useProgressPersistence.ts",
-          "operation": "modify",
-          "description": "Extend persistence helper to upsert best scores for each Indoor minigame for signed-in users, and to add coin rewards to total coins."
-        },
-        {
-          "path": "frontend/src/hooks/usePlayerProfile.ts",
-          "operation": "modify",
-          "description": "Ensure the player profile hook surfaces indoor minigame best scores for display on Indoor submenu and after saves."
-        }
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "summary": "Implement Car mode as a simple racing/time-trial with timer and persistent best time for signed-in users.",
-      "acceptanceCriteria": [
-        "Car mode has a start, in-progress, and finish state, with a timer shown in the UI.",
-        "A best time is tracked and displayed.",
-        "For signed-in users, best time persists across sessions and is loaded on entry."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/modes/CarPage.tsx",
-          "operation": "modify",
-          "description": "Implement a time-trial mini-game loop (start/in-progress/finish) with an on-screen timer, computed finish time, best-time display, and Exit-to-Hub control. Use shadcn-ui components for actions/panels. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/car/TrackView.tsx",
-          "operation": "create",
-          "description": "Create a simple track/track-progress visualization component used by Car mode to communicate progress toward finish. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useProgressPersistence.ts",
-          "operation": "modify",
-          "description": "Extend persistence helper to load and upsert best time for signed-in users, and refresh player profile after finishing."
-        },
-        {
-          "path": "frontend/src/hooks/usePlayerProfile.ts",
-          "operation": "modify",
-          "description": "Ensure the player profile hook exposes best time for Car mode for display in hub and within Car mode."
-        }
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "summary": "Implement Battle mode as a turn-based player-vs-CPU battle with stats, at least 3 actions, and persistent wins/streak for signed-in users.",
-      "acceptanceCriteria": [
-        "Battle mode allows a player to complete a full fight against a CPU opponent using at least 3 actions (e.g., attack, defend, special).",
-        "The battle ends deterministically with win/lose conditions and a result screen.",
-        "For signed-in users, wins count and best streak (or equivalent progression stat) persist across sessions."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/modes/BattlePage.tsx",
-          "operation": "modify",
-          "description": "Implement a deterministic turn-based battle loop (player vs CPU) with basic stats (HP/attack), at least 3 player actions, CPU turn resolution, and a result screen; include Exit-to-Hub navigation. Use shadcn-ui components for actions/status panels. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/battle/BattleHUD.tsx",
-          "operation": "create",
-          "description": "Create a BattleHUD component to display player/CPU HP, status, streak/wins display, and turn info. Use shadcn-ui Card/Badge-like components where available. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useProgressPersistence.ts",
-          "operation": "modify",
-          "description": "Extend persistence helper to update battle progression stats (wins count and best streak) for signed-in users and to add any coin rewards if applicable."
-        },
-        {
-          "path": "frontend/src/hooks/usePlayerProfile.ts",
-          "operation": "modify",
-          "description": "Ensure player profile hook surfaces battle stats (wins count/best streak) for display in hub and Battle mode."
-        }
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "summary": "Add a leaderboard screen per mode showing top players and the current signed-in user's position.",
-      "acceptanceCriteria": [
-        "A leaderboard screen exists and can be accessed from the hub.",
-        "User can switch between modes to view that mode’s leaderboard.",
-        "Backend returns a deterministic ordering and the frontend renders at least top 10 entries plus the signed-in user’s own position if available."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/LeaderboardPage.tsx",
-          "operation": "modify",
-          "description": "Implement leaderboard UI with per-mode selection and rendering for top 10 entries plus signed-in user's position when available. Use shadcn-ui Table, Select, Tabs, and Skeleton/Spinner components where available. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/hooks/useLeaderboard.ts",
-          "operation": "create",
-          "description": "Create a React Query hook that calls the backend capability to fetch a mode leaderboard (top N) and optionally derive/display the current user's rank when signed in, using actor access provided by core-infrastructure (via useActor). Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "modify",
-          "description": "Add a clear navigation entry from the hub to the Leaderboard page, consistent with the app theme and layout."
-        },
-        {
-          "path": "frontend/src/backend.d.ts",
-          "operation": "modify",
-          "description": "Ensure the frontend type declarations include the leaderboard backend capability signature needed by the Leaderboard hooks/UI so the app can compile against the intended contract."
-        }
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "summary": "Define and apply a cohesive Metablocks visual theme across hub and all modes, avoiding blue/purple as primary colors.",
-      "acceptanceCriteria": [
-        "All screens share a consistent theme (layout, type scale, buttons, panels).",
-        "Primary palette is not blue/purple-dominant.",
-        "UI remains readable and accessible (contrast and clear affordances)."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/index.css",
-          "operation": "create",
-          "description": "Create global styles and CSS variables to establish a cohesive Metablocks theme (e.g., warm/earthy primary palette) compatible with the existing Tailwind + shadcn-ui token approach, ensuring accessible contrast and consistent typography."
-        },
-        {
-          "path": "frontend/tailwind.config.js",
-          "operation": "modify",
-          "description": "Adjust Tailwind theme extensions (if needed) to support the Metablocks palette and consistent radii/shadows while keeping the primary palette non-blue/purple-dominant."
-        },
-        {
-          "path": "frontend/src/components/AppLayout.tsx",
-          "operation": "modify",
-          "description": "Apply consistent layout patterns (header, content container, panels, buttons) across all pages using shadcn-ui components and the global theme tokens. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "modify",
-          "description": "Apply the cohesive theme to the hub (typography scale, tiles, buttons, spacing) consistent with the global layout and tokens."
-        },
-        {
-          "path": "frontend/src/pages/modes/EndlessRunPage.tsx",
-          "operation": "modify",
-          "description": "Align Endless Run UI panels/buttons with the global Metablocks theme via shared components/tokens (no blue/purple primary emphasis)."
-        },
-        {
-          "path": "frontend/src/pages/modes/CityBuilderPage.tsx",
-          "operation": "modify",
-          "description": "Align City Builder UI panels/buttons with the global Metablocks theme via shared components/tokens."
-        },
-        {
-          "path": "frontend/src/pages/modes/FarmingPage.tsx",
-          "operation": "modify",
-          "description": "Align Farming UI panels/buttons with the global Metablocks theme via shared components/tokens."
-        },
-        {
-          "path": "frontend/src/pages/modes/IndoorPage.tsx",
-          "operation": "modify",
-          "description": "Align Indoor UI panels/buttons with the global Metablocks theme via shared components/tokens."
-        },
-        {
-          "path": "frontend/src/pages/modes/CarPage.tsx",
-          "operation": "modify",
-          "description": "Align Car UI panels/buttons with the global Metablocks theme via shared components/tokens."
-        },
-        {
-          "path": "frontend/src/pages/modes/BattlePage.tsx",
-          "operation": "modify",
-          "description": "Align Battle UI panels/buttons with the global Metablocks theme via shared components/tokens."
-        },
-        {
-          "path": "frontend/src/pages/LeaderboardPage.tsx",
-          "operation": "modify",
-          "description": "Align Leaderboard UI panels/table controls with the global Metablocks theme via shared components/tokens."
-        }
-      ]
-    },
-    {
-      "id": "REQ-12",
-      "summary": "Add and render generated static branding images (logo, hub background, and 6 mode icons) from frontend static assets.",
-      "acceptanceCriteria": [
-        "Generated images are added under frontend/public/assets/generated and referenced directly by the frontend.",
-        "Hub page displays the logo and a background/hero image.",
-        "Each of the 6 modes has an icon displayed in the hub menu."
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/public/assets/generated/metablocks-logo.dim_512x512.png",
-          "operation": "create",
-          "description": "Add the generated Metablocks logo asset at the exact required path so it can be referenced by the hub UI."
-        },
-        {
-          "path": "frontend/public/assets/generated/metablocks-hub-bg.dim_1920x1080.png",
-          "operation": "create",
-          "description": "Add the generated wide hub background illustration asset at the exact required path for the hub hero/background."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-endless-run.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated Endless Run icon asset at the exact required path for hub mode tiles."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-city-builder.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated City Builder icon asset at the exact required path for hub mode tiles."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-farming.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated Farming icon asset at the exact required path for hub mode tiles."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-indoor.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated Indoor mode icon asset at the exact required path for hub mode tiles."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-car.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated Car mode icon asset at the exact required path for hub mode tiles."
-        },
-        {
-          "path": "frontend/public/assets/generated/icon-battle.dim_256x256.png",
-          "operation": "create",
-          "description": "Add the generated Battle mode icon asset at the exact required path for hub mode tiles."
-        },
-        {
-          "path": "frontend/src/pages/HubPage.tsx",
-          "operation": "modify",
-          "description": "Render the static assets from frontend/public/assets/generated: display the logo (frontend/public/assets/generated/metablocks-logo.dim_512x512.png), the hub background/hero image (frontend/public/assets/generated/metablocks-hub-bg.dim_1920x1080.png), and show the 6 mode icons on the hub tiles (all icon-*.dim_256x256.png). Use shadcn-ui layout components for the hero/tiles. Verify the component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/components/ModeTile.tsx",
-          "operation": "modify",
-          "description": "Add support for rendering the per-mode icon assets from frontend/public/assets/generated to ensure each of the 6 modes has an icon in the hub menu. Verify the component's usage instructions before implementing."
+          "description": "Update the hub hero/branding area to use the static assets frontend/public/assets/generated/ps-puzzle-logo.dim_512x512.png and frontend/public/assets/generated/ps-puzzle-hub-bg.dim_1920x1080.png, and update each puzzle tile to use its corresponding icon: frontend/public/assets/generated/icon-puzzle-sliding.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-memory.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-words.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-sudoku.dim_256x256.png, frontend/public/assets/generated/icon-puzzle-lightsout.dim_256x256.png. Verify the component's usage instructions before implementing."
         }
       ]
     }

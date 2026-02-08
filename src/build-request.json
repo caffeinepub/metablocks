@@ -1,262 +1,138 @@
 {
   "kind": "build_request",
-  "title": "Metablocks: Online multi-mode game hub with persistent progression",
+  "title": "Create PS PUZZLE: a puzzle-collection game with multiple puzzle mini-games",
   "priority": "normal",
   "requirements": [
     {
-      "id": "REQ-1",
-      "text": "Create the core app structure for an online game named \"Metablocks\" with a main hub screen that lets a signed-in user choose between these game modes: Endless Run, City Builder, Farming, Indoor (minigames), Car (racing), and Battle.",
+      "id": "REQ-13",
+      "text": "Rebrand the application UI from \"Metablocks\" to \"PS PUZZLE\" and update all user-facing text to consistently use the new game name.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-11"
         ],
         "quotes": [
-          "Create an game which has game like endless run , city builder, farming game , indoor game,car game,battle game etc it name was metablocks it is an online game"
+          "Make an game which has many puzzle game named PS PUZZLE ."
         ]
       },
       "acceptanceCriteria": [
-        "App title/branding uses the name \"Metablocks\" in the UI.",
-        "A hub/menu screen exists and clearly shows the 6 modes: Endless Run, City Builder, Farming, Indoor, Car, Battle.",
-        "Each mode can be entered from the hub and exited back to the hub without page reloads."
+        "The header title in the global layout shows \"PS PUZZLE\" instead of \"METABLOCKS\".",
+        "The hub page hero title and primary branding text show \"PS PUZZLE\".",
+        "No prominent UI text elements still reference \"Metablocks\" (excluding any unavoidable legacy identifiers such as package/canister names)."
       ]
     },
     {
-      "id": "REQ-2",
-      "text": "Implement Internet Identity sign-in and show a clear signed-in / signed-out state in the UI; require sign-in before a player can save or load any online game progress.",
+      "id": "REQ-14",
+      "text": "Replace the current hub experience with a \"PS PUZZLE\" hub that presents a collection of puzzle mini-games and lets the user launch each puzzle from a clear tile/grid menu.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-11"
         ],
         "quotes": [
-          "it is an online game"
+          "Make an game which has many puzzle game named PS PUZZLE ."
         ]
       },
       "acceptanceCriteria": [
-        "Signed-out users can view the hub but are prompted to sign in when attempting to start a mode that persists progress.",
-        "Signed-in users see their principal (or a shortened identifier) displayed somewhere in the hub UI.",
-        "Sign-in/out works without modifying any files in the immutable paths list."
+        "The home route (\"/\") displays a puzzle-collection hub for PS PUZZLE (not the 6-mode Metablocks hub).",
+        "The hub shows at least 5 distinct puzzle tiles/cards, each with a title, short description, and icon.",
+        "Clicking a puzzle tile navigates to that puzzle’s screen."
       ]
     },
     {
-      "id": "REQ-3",
-      "text": "Add backend persistence for Metablocks player data, keyed by the authenticated user principal: player profile (display name optional), total coins, per-mode best scores, and last played timestamps.",
-      "target": "backend",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "it is an online game"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Backend exposes query/update methods to: getPlayer(), upsertPlayerProgress(...), and getLeaderboard(mode, limit).",
-        "Player data is stored per-caller principal and cannot be overwritten by other principals.",
-        "Per-mode best score updates only replace the stored best if the new score is higher."
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Implement the Endless Run mode as a playable mini-game with a simple loop (start, running, game over), scoring, and coin rewards; on game over, save the run score and coins to the backend for signed-in users.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "endless run"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Endless Run has a start action, an in-game state, and a game-over state.",
-        "A score is displayed during the run and a final score is shown on game over.",
-        "For signed-in users, the final score and earned coins are persisted and visible after returning to the hub (e.g., best score or total coins updates)."
-      ]
-    },
-    {
-      "id": "REQ-5",
-      "text": "Implement the City Builder mode as a simple grid-based builder with placeable structures (at least 3 types) that cost coins; persist the city layout online for signed-in users and reload it on entry.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "city builder"
-        ]
-      },
-      "acceptanceCriteria": [
-        "City Builder displays a grid and allows placing at least 3 building types with different costs.",
-        "Placing a building reduces the player’s coin total (with validation to prevent negative coins).",
-        "For signed-in users, the city layout persists: after leaving and re-entering City Builder, the previously placed buildings are restored."
-      ]
-    },
-    {
-      "id": "REQ-6",
-      "text": "Implement the Farming mode with at least 3 crop types, a plant → grow (time-based) → harvest loop, and coin rewards; persist farm plots and crop timers online for signed-in users.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "farming game"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Player can plant at least 3 crop types on farm plots.",
-        "Crops have a visible growing state and become harvestable after a duration.",
-        "For signed-in users, farm state persists across leaving/reloading the app, including growth progress based on timestamps."
-      ]
-    },
-    {
-      "id": "REQ-7",
-      "text": "Implement the Indoor mode as a small set of at least 2 minigames (e.g., a quick reaction game and a simple puzzle), each with scoring and coin rewards; persist best scores per minigame for signed-in users.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "indoor game"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Indoor mode contains at least 2 distinct playable minigames accessible from an Indoor submenu.",
-        "Each minigame has a score and an end condition.",
-        "For signed-in users, best scores per minigame are saved and shown when revisiting the Indoor mode."
-      ]
-    },
-    {
-      "id": "REQ-8",
-      "text": "Implement the Car mode as a simple racing/time-trial mini-game with a track, timer, and performance result (best time); persist best time online for signed-in users.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "car game"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Car mode has a start, in-progress, and finish state, with a timer shown in the UI.",
-        "A best time is tracked and displayed.",
-        "For signed-in users, best time persists across sessions and is loaded on entry."
-      ]
-    },
-    {
-      "id": "REQ-9",
-      "text": "Implement the Battle mode as a turn-based battle mini-game (player vs CPU) with basic stats (HP, attack) and at least 3 actions; persist battle-related progression (e.g., wins count and best streak) online for signed-in users.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "battle game"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Battle mode allows a player to complete a full fight against a CPU opponent using at least 3 actions (e.g., attack, defend, special).",
-        "The battle ends deterministically with win/lose conditions and a result screen.",
-        "For signed-in users, wins count and best streak (or equivalent progression stat) persist across sessions."
-      ]
-    },
-    {
-      "id": "REQ-10",
-      "text": "Add a global leaderboard screen that shows top players per mode (best score or best time depending on mode) and the current user’s rank when signed in.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-2"
-        ],
-        "quotes": [
-          "it is an online game"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A leaderboard screen exists and can be accessed from the hub.",
-        "User can switch between modes to view that mode’s leaderboard.",
-        "Backend returns a deterministic ordering and the frontend renders at least top 10 entries plus the signed-in user’s own position if available."
-      ]
-    },
-    {
-      "id": "REQ-11",
-      "text": "Define and apply a cohesive visual theme for Metablocks (distinct style, color palette, typography, component styling) across the hub and all modes, avoiding blue/purple as the primary palette.",
+      "id": "REQ-15",
+      "text": "Implement at least 5 distinct puzzle mini-games under PS PUZZLE, each with its own playable loop (start/play/end), a clear win/lose or completion condition, and a numeric score.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-11"
         ],
         "quotes": [
-          "it name was metablocks"
+          "Make an game which has many puzzle game named PS PUZZLE ."
         ]
       },
       "acceptanceCriteria": [
-        "All screens share a consistent theme (layout, type scale, buttons, panels).",
-        "Primary palette is not blue/purple-dominant.",
-        "UI remains readable and accessible (contrast and clear affordances)."
+        "There are at least 5 puzzle mini-games available from the PS PUZZLE hub.",
+        "Each puzzle mini-game has: (1) a Start/New Game action, (2) a way to reset/retry, (3) an end/completion state, and (4) a displayed numeric score.",
+        "Each puzzle mini-game includes navigation back to the PS PUZZLE hub."
       ]
     },
     {
-      "id": "REQ-12",
-      "text": "Add generated static image assets for Metablocks branding and UI (logo, hub background, and mode icons) and render them from frontend static assets.",
-      "target": "frontend",
+      "id": "REQ-16",
+      "text": "Add signed-in persistence for PS PUZZLE so each puzzle mini-game can save the player’s best score online (keyed by Internet Identity principal) and display the best score on the hub when available.",
+      "target": "both",
       "source": {
         "messageIds": [
-          "msg-2"
+          "msg-11"
         ],
         "quotes": [
-          "it name was metablocks"
+          "Make an game which has many puzzle game named PS PUZZLE ."
         ]
       },
       "acceptanceCriteria": [
-        "Generated images are added under frontend/public/assets/generated and referenced directly by the frontend.",
-        "Hub page displays the logo and a background/hero image.",
-        "Each of the 6 modes has an icon displayed in the hub menu."
+        "When signed in, completing a puzzle mini-game saves a score to the backend and updates the player profile cache in the UI.",
+        "The PS PUZZLE hub shows the player’s best score per puzzle tile when signed in and data is available.",
+        "When signed out, puzzle games remain playable, but saving best scores is gated (e.g., prompts the user to sign in before saving)."
+      ]
+    },
+    {
+      "id": "REQ-17",
+      "text": "Update routing/navigation so PS PUZZLE puzzle pages are first-class routes in the app router (no broken links), and remove/disable navigation entry points to the old Metablocks mode routes from the primary hub experience.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-11"
+        ],
+        "quotes": [
+          "Make an game which has many puzzle game named PS PUZZLE ."
+        ]
+      },
+      "acceptanceCriteria": [
+        "All puzzle mini-games are reachable via stable routes registered in the router.",
+        "The primary hub no longer presents the Metablocks mode tiles (Endless Run/City Builder/Farming/Indoor/Car/Battle).",
+        "Navigating back from any puzzle returns the user to the PS PUZZLE hub without errors."
+      ]
+    },
+    {
+      "id": "REQ-18",
+      "text": "Render newly generated PS PUZZLE branding and puzzle icons from static assets under frontend/public/assets/generated and use them in the PS PUZZLE hub UI.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-11"
+        ],
+        "quotes": [
+          "Make an game which has many puzzle game named PS PUZZLE ."
+        ]
+      },
+      "acceptanceCriteria": [
+        "The PS PUZZLE hub uses the generated logo and background images as part of its hero/branding area.",
+        "Each puzzle tile uses a corresponding generated icon from /assets/generated.",
+        "No generated images are served via backend endpoints; all are referenced as static files."
       ]
     }
   ],
   "constraints": [
-    "Backend must remain a single Motoko actor (single-actor architecture).",
-    "Do not edit files under frontend immutable paths: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui.",
-    "Do not implement real-time multiplayer (no WebSockets/Socket.io); \"online\" must be achieved via persistent storage + leaderboards + asynchronous state.",
-    "No external databases or third-party auth providers; use Internet Identity only."
+    "Backend must remain a single Motoko actor (all logic in backend/main.mo).",
+    "Do not edit files under frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, or anything in frontend/src/components/ui; compose these components instead.",
+    "Use English for all user-facing UI text."
   ],
   "nonGoals": [
-    "Real-time PvP battles or synchronous multiplayer racing.",
-    "Open-world/fully featured city-builder or farming sim depth (keep MVP-scale mechanics).",
-    "In-app purchases, NFTs, or external wallet integrations.",
-    "Mobile-native (React Native) app delivery."
+    "Building non-puzzle game modes (endless runner, city builder, farming, car racing, battle) as part of PS PUZZLE.",
+    "Adding third-party authentication providers (only Internet Identity is allowed).",
+    "Adding external databases or non-Motoko backend services.",
+    "Real-time multiplayer or websocket-based features."
   ],
   "imageRequirements": {
     "required": [
-      "Metablocks logo in a blocky/isometric game style (metablocks-logo.dim_512x512.png)",
-      "Wide hub background illustration with a stylized city/farm/track/arena collage (metablocks-hub-bg.dim_1920x1080.png)",
-      "Endless Run mode icon, blocky runner silhouette (icon-endless-run.dim_256x256.png)",
-      "City Builder mode icon, blocky skyline/building (icon-city-builder.dim_256x256.png)",
-      "Farming mode icon, blocky crop/field (icon-farming.dim_256x256.png)",
-      "Indoor mode icon, blocky puzzle/controller (icon-indoor.dim_256x256.png)",
-      "Car mode icon, blocky car/track (icon-car.dim_256x256.png)",
-      "Battle mode icon, blocky sword/shield (icon-battle.dim_256x256.png)"
+      "PS PUZZLE logo, bold playful puzzle-themed mark (ps-puzzle-logo.dim_512x512.png)",
+      "Wide puzzle-themed hub background illustration (ps-puzzle-hub-bg.dim_1920x1080.png)",
+      "Puzzle icon: sliding tiles (icon-puzzle-sliding.dim_256x256.png)",
+      "Puzzle icon: memory match cards (icon-puzzle-memory.dim_256x256.png)",
+      "Puzzle icon: word scramble/anagram (icon-puzzle-words.dim_256x256.png)",
+      "Puzzle icon: sudoku/number grid (icon-puzzle-sudoku.dim_256x256.png)",
+      "Puzzle icon: lights-out/grid toggle (icon-puzzle-lightsout.dim_256x256.png)"
     ],
     "edits": []
-  },
-  "userProfileUpdate": {
-    "goalsToAdd": [
-      "Build an online multi-mode game called Metablocks (endless runner, city builder, farming, indoor minigames, car/time-trial, battle) with persistent progression and leaderboards."
-    ],
-    "goalsToRemove": [],
-    "preferencesToAdd": [
-      "Use English for user-facing text."
-    ],
-    "preferencesToRemove": [],
-    "miscToAdd": [],
-    "miscToRemove": [],
-    "fieldsToSet": {},
-    "fieldsToDelete": []
   }
 }

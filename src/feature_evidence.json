@@ -2,39 +2,10 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-create-the-core-app-structure-for-an-online-game-named-metablocks-with-a-main-hub-screen-that-lets-a-signed-in-user-choose-between-these-game-modes-endless-run-city-builder-farming-indoor-minigames-car-racing-and-battle",
-      "featureTitle": "Create the core app structure for an online game named \"Metablocks\" with a main hub screen that lets a signed-in user choose between these game modes: Endless Run, City Builder, Farming, Indoor (minigames), Car (racing), and Battle.",
-      "files": [
-        "frontend/src/App.tsx",
-        "frontend/src/components/AppLayout.tsx",
-        "frontend/src/components/ModeTile.tsx",
-        "frontend/src/pages/HubPage.tsx",
-        "frontend/src/pages/LeaderboardPage.tsx",
-        "frontend/src/pages/modes/BattlePage.tsx",
-        "frontend/src/pages/modes/CarPage.tsx",
-        "frontend/src/pages/modes/CityBuilderPage.tsx",
-        "frontend/src/pages/modes/EndlessRunPage.tsx",
-        "frontend/src/pages/modes/FarmingPage.tsx",
-        "frontend/src/pages/modes/IndoorPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-1"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-internet-identity-sign-in-and-show-a-clear-signed-in-signed-out-state-in-the-ui-require-sign-in-before-a-player-can-save-or-load-any-online-game-progress",
-      "featureTitle": "Implement Internet Identity sign-in and show a clear signed-in / signed-out state in the UI; require sign-in before a player can save or load any online game progress.",
+      "featureId": "feature-rebrand-the-application-ui-from-metablocks-to-ps-puzzle-and-update-all-user-facing-text-to-consistently-use-the-new-game-name",
+      "featureTitle": "Rebrand the application UI from \"Metablocks\" to \"PS PUZZLE\" and update all user-facing text to consistently use the new game name.",
       "files": [
         "frontend/src/components/AppLayout.tsx",
-        "frontend/src/components/AuthStatus.tsx",
         "frontend/src/components/RequireSignInDialog.tsx",
         "frontend/src/pages/HubPage.tsx"
       ],
@@ -43,181 +14,18 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-2"
+        "REQ-13"
       ],
       "confidence": "high"
     },
     {
-      "featureId": "feature-implement-the-endless-run-mode-as-a-playable-mini-game-with-a-simple-loop-start-running-game-over-scoring-and-coin-rewards-on-game-over-save-the-run-score-and-coins-to-the-backend-for-signed-in-users",
-      "featureTitle": "Implement the Endless Run mode as a playable mini-game with a simple loop (start, running, game over), scoring, and coin rewards; on game over, save the run score and coins to the backend for signed-in users.",
+      "featureId": "feature-replace-the-current-hub-experience-with-a-ps-puzzle-hub-that-presents-a-collection-of-puzzle-mini-games-and-lets-the-user-launch-each-puzzle-from-a-clear-tile-grid-menu",
+      "featureTitle": "Replace the current hub experience with a \"PS PUZZLE\" hub that presents a collection of puzzle mini-games and lets the user launch each puzzle from a clear tile/grid menu.",
       "files": [
-        "frontend/src/hooks/usePlayerProfile.ts",
-        "frontend/src/pages/HubPage.tsx",
-        "frontend/src/pages/modes/EndlessRunPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-4"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-the-city-builder-mode-as-a-simple-grid-based-builder-with-placeable-structures-at-least-3-types-that-cost-coins-persist-the-city-layout-online-for-signed-in-users-and-reload-it-on-entry",
-      "featureTitle": "Implement the City Builder mode as a simple grid-based builder with placeable structures (at least 3 types) that cost coins; persist the city layout online for signed-in users and reload it on entry.",
-      "files": [
-        "frontend/src/hooks/usePlayerProfile.ts",
-        "frontend/src/pages/modes/CityBuilderPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-5"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-the-farming-mode-with-at-least-3-crop-types-a-plant-grow-time-based-harvest-loop-and-coin-rewards-persist-farm-plots-and-crop-timers-online-for-signed-in-users",
-      "featureTitle": "Implement the Farming mode with at least 3 crop types, a plant → grow (time-based) → harvest loop, and coin rewards; persist farm plots and crop timers online for signed-in users.",
-      "files": [
-        "frontend/src/pages/modes/FarmingPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-6"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-the-indoor-mode-as-a-small-set-of-at-least-2-minigames-e-g-a-quick-reaction-game-and-a-simple-puzzle-each-with-scoring-and-coin-rewards-persist-best-scores-per-minigame-for-signed-in-users",
-      "featureTitle": "Implement the Indoor mode as a small set of at least 2 minigames (e.g., a quick reaction game and a simple puzzle), each with scoring and coin rewards; persist best scores per minigame for signed-in users.",
-      "files": [
-        "frontend/src/hooks/usePlayerProfile.ts",
-        "frontend/src/pages/modes/IndoorPage.tsx",
-        "frontend/src/pages/modes/indoor/PuzzleGame.tsx",
-        "frontend/src/pages/modes/indoor/ReactionGame.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-7"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-the-car-mode-as-a-simple-racing-time-trial-mini-game-with-a-track-timer-and-performance-result-best-time-persist-best-time-online-for-signed-in-users",
-      "featureTitle": "Implement the Car mode as a simple racing/time-trial mini-game with a track, timer, and performance result (best time); persist best time online for signed-in users.",
-      "files": [
-        "frontend/src/hooks/usePlayerProfile.ts",
-        "frontend/src/pages/modes/CarPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-8"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-implement-the-battle-mode-as-a-turn-based-battle-mini-game-player-vs-cpu-with-basic-stats-hp-attack-and-at-least-3-actions-persist-battle-related-progression-e-g-wins-count-and-best-streak-online-for-signed-in-users",
-      "featureTitle": "Implement the Battle mode as a turn-based battle mini-game (player vs CPU) with basic stats (HP, attack) and at least 3 actions; persist battle-related progression (e.g., wins count and best streak) online for signed-in users.",
-      "files": [
-        "frontend/src/hooks/usePlayerProfile.ts",
-        "frontend/src/pages/modes/BattlePage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-9"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-a-global-leaderboard-screen-that-shows-top-players-per-mode-best-score-or-best-time-depending-on-mode-and-the-current-user-s-rank-when-signed-in",
-      "featureTitle": "Add a global leaderboard screen that shows top players per mode (best score or best time depending on mode) and the current user’s rank when signed in.",
-      "files": [
-        "frontend/src/pages/HubPage.tsx",
-        "frontend/src/pages/LeaderboardPage.tsx"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-10"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-define-and-apply-a-cohesive-visual-theme-for-metablocks-distinct-style-color-palette-typography-component-styling-across-the-hub-and-all-modes-avoiding-blue-purple-as-the-primary-palette",
-      "featureTitle": "Define and apply a cohesive visual theme for Metablocks (distinct style, color palette, typography, component styling) across the hub and all modes, avoiding blue/purple as the primary palette.",
-      "files": [
-        "frontend/src/components/AppLayout.tsx",
-        "frontend/src/index.css",
-        "frontend/src/pages/HubPage.tsx",
-        "frontend/src/pages/LeaderboardPage.tsx",
-        "frontend/src/pages/modes/BattlePage.tsx",
-        "frontend/src/pages/modes/CarPage.tsx",
-        "frontend/src/pages/modes/CityBuilderPage.tsx",
-        "frontend/src/pages/modes/EndlessRunPage.tsx",
-        "frontend/src/pages/modes/FarmingPage.tsx",
-        "frontend/src/pages/modes/IndoorPage.tsx",
-        "frontend/tailwind.config.js"
-      ],
-      "components": [
-        "core-infrastructure@1.0.2",
-        "shadcn-ui@1.0.0",
-        "build-template-react@1.0.0",
-        "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
-      ],
-      "testIds": [
-        "REQ-11"
-      ],
-      "confidence": "high"
-    },
-    {
-      "featureId": "feature-add-generated-static-image-assets-for-metablocks-branding-and-ui-logo-hub-background-and-mode-icons-and-render-them-from-frontend-static-assets",
-      "featureTitle": "Add generated static image assets for Metablocks branding and UI (logo, hub background, and mode icons) and render them from frontend static assets.",
-      "files": [
-        "frontend/src/components/ModeTile.tsx",
         "frontend/src/pages/HubPage.tsx"
       ],
       "components": [
@@ -225,10 +33,105 @@
         "shadcn-ui@1.0.0",
         "build-template-react@1.0.0",
         "initial-app@1.0.0",
-        "github-export-icp-cli@1.0.0"
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
       ],
       "testIds": [
-        "REQ-12"
+        "REQ-14"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-implement-at-least-5-distinct-puzzle-mini-games-under-ps-puzzle-each-with-its-own-playable-loop-start-play-end-a-clear-win-lose-or-completion-condition-and-a-numeric-score",
+      "featureTitle": "Implement at least 5 distinct puzzle mini-games under PS PUZZLE, each with its own playable loop (start/play/end), a clear win/lose or completion condition, and a numeric score.",
+      "files": [
+        "frontend/src/pages/HubPage.tsx",
+        "frontend/src/pages/puzzles/LightsOutPage.tsx",
+        "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
+        "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
+        "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
+        "frontend/src/pages/puzzles/WordScramblePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-15"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-add-signed-in-persistence-for-ps-puzzle-so-each-puzzle-mini-game-can-save-the-player-s-best-score-online-keyed-by-internet-identity-principal-and-display-the-best-score-on-the-hub-when-available",
+      "featureTitle": "Add signed-in persistence for PS PUZZLE so each puzzle mini-game can save the player’s best score online (keyed by Internet Identity principal) and display the best score on the hub when available.",
+      "files": [
+        "frontend/src/components/RequireSignInDialog.tsx",
+        "frontend/src/hooks/usePuzzleBestScores.ts",
+        "frontend/src/pages/HubPage.tsx",
+        "frontend/src/pages/puzzles/LightsOutPage.tsx",
+        "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
+        "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
+        "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
+        "frontend/src/pages/puzzles/WordScramblePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-16"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-update-routing-navigation-so-ps-puzzle-puzzle-pages-are-first-class-routes-in-the-app-router-no-broken-links-and-remove-disable-navigation-entry-points-to-the-old-metablocks-mode-routes-from-the-primary-hub-experience",
+      "featureTitle": "Update routing/navigation so PS PUZZLE puzzle pages are first-class routes in the app router (no broken links), and remove/disable navigation entry points to the old Metablocks mode routes from the primary hub experience.",
+      "files": [
+        "frontend/src/App.tsx",
+        "frontend/src/pages/HubPage.tsx",
+        "frontend/src/pages/puzzles/LightsOutPage.tsx",
+        "frontend/src/pages/puzzles/MemoryMatchPage.tsx",
+        "frontend/src/pages/puzzles/SlidingTilesPage.tsx",
+        "frontend/src/pages/puzzles/SudokuMiniPage.tsx",
+        "frontend/src/pages/puzzles/WordScramblePage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-17"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-render-newly-generated-ps-puzzle-branding-and-puzzle-icons-from-static-assets-under-frontend-public-assets-generated-and-use-them-in-the-ps-puzzle-hub-ui",
+      "featureTitle": "Render newly generated PS PUZZLE branding and puzzle icons from static assets under frontend/public/assets/generated and use them in the PS PUZZLE hub UI.",
+      "files": [
+        "frontend/src/pages/HubPage.tsx"
+      ],
+      "components": [
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0",
+        "authorization@4.0.0"
+      ],
+      "testIds": [
+        "REQ-18"
       ],
       "confidence": "high"
     }
